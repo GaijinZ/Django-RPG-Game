@@ -2,3 +2,4 @@ pyvenv.cfg
 Scripts/
 .idea/
 Include/
+Lib/
