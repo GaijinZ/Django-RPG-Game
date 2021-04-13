@@ -33,13 +33,13 @@ class MyAccountManager(BaseUserManager):
 
 
 class Account(AbstractUser):
-    email = models.EmailField(verbose_name='email', max_length=60, unique=True)
+    email = models.EmailField(max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
     avatar = models.ImageField(null=True, blank=True,
                                upload_to='profile_pic',
                                default='profile_pic/default.jpg')
-    date_joined = models.DateTimeField(verbose_name='date joined', auto_now_add=True)
-    last_login = models.DateTimeField(verbose_name='last login', auto_now=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     email_confirmed = models.BooleanField(default=False)
