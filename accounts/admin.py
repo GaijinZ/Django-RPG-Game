@@ -11,6 +11,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_superuser', 'is_staff', 'is_active',)
     fieldsets = (
         (None, {'fields': ('email', 'password', 'username', 'avatar',)}),
+        ('Personal info', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_superuser', 'is_active',)}),
     )
     add_fieldsets = (

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -20,13 +22,14 @@ class MyAccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
+    def create_superuser(self, email, username, password=None):
         user = self.create_user(
             email=self.normalize_email(email),
             password=password,
             username=username,
         )
 
+        user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
@@ -35,6 +38,8 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractUser):
     email = models.EmailField(max_length=60, unique=True)
     username = models.CharField(max_length=30, unique=True)
+    first_name = models.CharField(null=True, blank=True, verbose_name='first name', max_length=30)
+    last_name = models.CharField(null=True, blank=True, verbose_name='last name', max_length=30)
     avatar = models.ImageField(null=True, blank=True,
                                upload_to='profile_pic',
                                default='profile_pic/default.jpg')
@@ -42,7 +47,6 @@ class Account(AbstractUser):
     last_login = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
-    email_confirmed = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -65,3 +69,10 @@ class Account(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    email_confirmed = models.BooleanField(default=False)
+
+    objects = models.Manager()

@@ -2,5 +2,5 @@ pyvenv.cfg
 Scripts/
 .idea/
 Include/
-Lib/*
-RPG/RPG/settings/
+Lib/
+RPG/RPG/settings.py
