@@ -23,10 +23,11 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls', namespace='accounts')),
+    path('', include('characters.urls', namespace='characters')),
+    path('', include('game.urls', namespace='game')),
+    path('', include('items.urls', namespace='items')),
     path('', include('monsters.urls', namespace='monsters')),
     path('', include('shop.urls', namespace='shop')),
-    path('', include('items.urls', namespace='items')),
-    path('', include('characters.urls', namespace='characters')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

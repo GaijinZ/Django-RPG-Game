@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 # Create your models here.
@@ -45,7 +43,7 @@ class Account(AbstractUser):
                                default='profile_pic/default.jpg')
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
@@ -72,7 +70,10 @@ class Account(AbstractUser):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(Account, on_delete=models.CASCADE)
+    username = models.OneToOneField(Account, on_delete=models.CASCADE)
     email_confirmed = models.BooleanField(default=False)
 
     objects = models.Manager()
+
+    def __str__(self):
+        return f'{self.username}'

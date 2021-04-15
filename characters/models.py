@@ -12,3 +12,6 @@ class Character(models.Model):
     gold = models.IntegerField()
 
     objects = models.Manager()
+
+    def __str__(self):
+        return self.name

@@ -1,23 +1,22 @@
 from django.shortcuts import render, redirect
-from django.views.generic import View
-from django.contrib.auth import login
-from django.utils.encoding import force_text
-from django.utils.http import urlsafe_base64_decode
-
+from django.urls import reverse_lazy
+from django.views.generic import View, CreateView, RedirectView, FormView
+from django.contrib.auth import logout, authenticate, login
+from django.utils.encoding import force_text, force_bytes
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from .tokens import account_activation_token
 from .models import Account
 
 
-class RegisterView(View):
+class RegisterView(CreateView):
     form_class = RegisterForm
     template_name = 'accounts/signup.html'
+    success_url = reverse_lazy('accounts:sign-in')
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -25,15 +24,14 @@ class RegisterView(View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
-        if form.is_valid():
 
+        if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = False
             user.save()
 
             current_site = get_current_site(request)
             subject = 'Activate Your Account'
-            message = render_to_string('emails/account_activation_email.html', {
+            message = render_to_string('accounts/account_activation_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -43,7 +41,7 @@ class RegisterView(View):
 
             messages.success(request, 'Please Confirm your email to complete registration.')
 
-            return redirect('login')
+            return redirect(self.success_url)
 
         return render(request, self.template_name, {'form': form})
 
@@ -63,7 +61,31 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             messages.success(request, 'Your account have been confirmed.')
-            return redirect('home')
+            return redirect('/')
         else:
             messages.warning(request, 'The confirmation link was invalid, possibly because it has already been used.')
-            return redirect('home')
+            return redirect('/')
+
+
+class LoginView(FormView):
+    form_class = LoginForm
+    success_url = '/'
+    template_name = 'accounts/sign-in.html'
+
+    def form_valid(self, form):
+        request = self.request
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+        user = authenticate(request, username=email, password=password)
+        if user and user.is_active:
+            login(self.request, user)
+            return redirect(self.success_url)
+        return super().form_invalid(form)
+
+
+class LogoutView(RedirectView):
+    url = '/'
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return super().get(request, *args, **kwargs)

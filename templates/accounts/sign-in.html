@@ -1,14 +1,13 @@
 
 
-{% block title %}Sign Page{% endblock title %}
 
 {% block content %}
 
-<h2>Sign Page</h2>
+<h2>Sign in</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Register</button>
+    <button type="submit">Login</button>
     <br><br>
     <a href="{% url 'game:home' %}">Home</a>
 </form>
