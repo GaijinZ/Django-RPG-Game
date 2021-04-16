@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('price', models.IntegerField()),
                 ('item_name', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_name', to='items.item')),
-                ('level_required', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='characters.character')),
+                ('level_required', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='characters.characters')),
             ],
         ),
     ]

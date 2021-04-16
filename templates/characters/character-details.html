@@ -1,0 +1,28 @@
+
+
+{% block content %}
+
+<h2>Hero details</h2>
+
+{% for character in character_data %}
+    <h4>Name</h4>
+    {{ character.name }}
+    <h4>Health</h4>
+    {{ character.max_health }}
+    <h4>Mana</h4>
+    {{ character.max_mana }}
+    <h4>Strength</h4>
+    {{ character.strength }}
+    <h4>Intelligence</h4>
+    {{ character.intelligence }}
+    <h4>Exp</h4>
+    {{ character.experience }}
+    <h4>Levle</h4>
+    {{ character.level }}
+    <h4>Gold</h4>
+    {{ character.gold }}
+{% endfor %}
+    <br><br>
+    <a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

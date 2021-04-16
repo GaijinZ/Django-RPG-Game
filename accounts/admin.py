@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Account, Profile
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
@@ -29,5 +30,5 @@ class UserAdmin(admin.ModelAdmin):
         model = Account
 
 
-admin.site.register(Account)
+admin.site.register(Account, UserAdmin)
 admin.site.register(Profile)

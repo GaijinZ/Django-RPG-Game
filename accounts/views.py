@@ -15,7 +15,7 @@ from .models import Account
 
 class RegisterView(CreateView):
     form_class = RegisterForm
-    template_name = 'accounts/signup.html'
+    template_name = 'accounts/sign-up.html'
     success_url = reverse_lazy('accounts:sign-in')
 
     def get(self, request, *args, **kwargs):
@@ -73,10 +73,9 @@ class LoginView(FormView):
     template_name = 'accounts/sign-in.html'
 
     def form_valid(self, form):
-        request = self.request
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
-        user = authenticate(request, username=email, password=password)
+        user = authenticate(self.request, username=email, password=password)
         if user and user.is_active:
             login(self.request, user)
             return redirect(self.success_url)

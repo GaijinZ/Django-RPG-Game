@@ -2,10 +2,14 @@
 
 {% block content %}
 
-
-
-<a href="{% url 'accounts:signup' %}"><h5>Signup!</h5></a>
-<a href="{% url 'accounts:sign-in' %}"><h5>Sign in!</h5></a>
-
+{% if user.is_authenticated %}
+    {{ user.username }}
+    <a href="{% url 'accounts:sign-out-redirect' %}"><h5>Sign out</h5></a>
+    <a href="{% url 'characters:character-create' %}"><h5>Create a hero</h5></a>
+    <a href="{% url 'characters:character-list' user.pk %}"><h5>My heros</h5></a>
+{% else %}
+    <a href="{% url 'accounts:sign-up' %}"><h5>Signup!</h5></a>
+    <a href="{% url 'accounts:sign-in' %}"><h5>Sign in!</h5></a>
+{% endif %}
 
 {% endblock %}

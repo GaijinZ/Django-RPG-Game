@@ -70,10 +70,10 @@ class Account(AbstractUser):
 
 
 class Profile(models.Model):
-    username = models.OneToOneField(Account, on_delete=models.CASCADE)
+    user = models.OneToOneField(Account, on_delete=models.CASCADE)
     email_confirmed = models.BooleanField(default=False)
 
     objects = models.Manager()
 
     def __str__(self):
-        return f'{self.username}'
+        return f'{self.user}'
