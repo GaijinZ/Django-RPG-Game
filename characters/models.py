@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 from accounts.models import Account
+from items.models import Weapon, Armor, Spell
 
 
 class Character(models.Model):
@@ -14,6 +15,9 @@ class Character(models.Model):
     experience = models.IntegerField(default=1)
     level = models.IntegerField(default=1)
     gold = models.IntegerField(default=1)
+    weapon_equipped = models.ForeignKey(Weapon, on_delete=models.CASCADE, default=1)
+    armor_equipped = models.ForeignKey(Armor, on_delete=models.CASCADE, blank=True, null=True)
+    spell_equipped = models.ManyToManyField(Spell, blank=True)
 
     objects = models.Manager()
 

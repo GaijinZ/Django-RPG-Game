@@ -21,6 +21,12 @@
     {{ character.level }}
     <h4>Gold</h4>
     {{ character.gold }}
+    <h4>Weapon</h4>
+    {{ character.weapon_equipped.name }}
+    <h4>Armor</h4>
+    {{ character.armor_equipped.name }}
+    <h4>Spells</h4>
+    {{ character.spell_equipped.name }}
 {% endfor %}
 <br><br>
 <a href="{% url 'game:home' %}">Home</a>

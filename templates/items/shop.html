@@ -1,0 +1,32 @@
+
+
+
+{% block content %}
+
+{% for weapon in weapon_data %}
+<h4>{{ weapon.name }}</h4>
+<h5>Minimum damage - {{ weapon.min_melee_dmg }}</h5>
+<h5>Maximum damage - {{ weapon.max_melee_dmg }}</h5>
+<h5>Level required - {{ weapon.level_required }}</h5>
+<h5>Price - {{ weapon.price }} gold</h5>
+{% endfor %}
+
+{% for armor in armor_data %}
+<h4>{{ armor.name }}</h4>
+<h5>Defence - {{ armor.defence }}</h5>
+<h5>Additional health - {{ armor.health }}</h5>
+<h5>Level required - {{ armor.level_required }}</h5>
+<h5>Price - {{ armor.price }}</h5>
+{% endfor %}
+
+{% for spell in spell_data %}
+<h4>{{ spell.name }}</h4>
+<h5>Minimum damage - {{ spell.min_spell_dmg }}</h5>
+<h5>Maximum damage - {{ spell.max_spell_dmg }}</h5>
+<h5>Level required - {{ spell.level_required }}</h5>
+<h5>Price - {{ spell.price }}</h5>
+{% endfor %}
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

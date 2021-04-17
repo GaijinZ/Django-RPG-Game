@@ -27,7 +27,6 @@ urlpatterns = [
     path('', include('game.urls', namespace='game')),
     path('', include('items.urls', namespace='items')),
     path('', include('monsters.urls', namespace='monsters')),
-    path('', include('shop.urls', namespace='shop')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

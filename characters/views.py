@@ -34,3 +34,7 @@ class CharacterDetailsView(LoginRequiredMixin, DetailView):
 
         context['character_data'] = character_data
         return context
+
+
+class CharacterInventory(ListView):
+    pass

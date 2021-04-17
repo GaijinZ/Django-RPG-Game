@@ -1,12 +1,12 @@
 from django.db import models
 
 
-# Create your models here.
-
 class Weapon(models.Model):
     name = models.CharField(max_length=50)
     min_melee_dmg = models.IntegerField()
     max_melee_dmg = models.IntegerField()
+    level_required = models.IntegerField()
+    price = models.IntegerField()
 
     objects = models.Manager()
 
@@ -18,6 +18,8 @@ class Spell(models.Model):
     name = models.CharField(max_length=50)
     min_spell_dmg = models.IntegerField()
     max_spell_dmg = models.IntegerField()
+    level_required = models.IntegerField()
+    price = models.IntegerField()
 
     objects = models.Manager()
 
@@ -29,6 +31,8 @@ class Armor(models.Model):
     name = models.CharField(max_length=50)
     defence = models.IntegerField()
     health = models.IntegerField()
+    level_required = models.IntegerField()
+    price = models.IntegerField()
 
     objects = models.Manager()
 
