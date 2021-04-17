@@ -6,5 +6,6 @@
 {% for object in object_list %}
 <a href="{% url 'characters:character-details' object.pk %}"><h5>{{ object.name }}</h5></a>
 {% endfor %}
-
+    <br><br>
+    <a href="{% url 'game:home' %}">Home</a>
 {% endblock %}

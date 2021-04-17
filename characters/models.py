@@ -1,8 +1,11 @@
 from django.db import models
 from django.urls import reverse
 
+from accounts.models import Account
+
 
 class Character(models.Model):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, unique=True)
     max_health = models.IntegerField(default=50)
     max_mana = models.IntegerField(default=30)

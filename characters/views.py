@@ -20,7 +20,7 @@ class CharacterListView(LoginRequiredMixin, ListView):
     template_name = 'characters/character-list.html'
 
     def get_queryset(self):
-        return Character.objects.all()
+        return Character.objects.filter(user=self.kwargs['pk'])
 
 
 class CharacterDetailsView(LoginRequiredMixin, DetailView):
