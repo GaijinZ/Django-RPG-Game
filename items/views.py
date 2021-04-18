@@ -10,9 +10,7 @@ class ShopView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        weapon_data = Weapon.objects.filter(name='pk')\
-            if Character.objects.filter(weapon_equipped__name='pk').exists()\
-            else None
+        weapon_data = Weapon.objects.exclude(name__in=Character.objects.values_list('weapon_equipped__name', flat=True))
         armor_data = Armor.objects.all()
         spell_data = Spell.objects.all()
 
