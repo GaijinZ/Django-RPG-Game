@@ -18,6 +18,8 @@ class Spell(models.Model):
     name = models.CharField(max_length=50)
     min_spell_dmg = models.IntegerField()
     max_spell_dmg = models.IntegerField()
+    mana_cost = models.IntegerField()
+    dmg_type = models.CharField(max_length=50)
     level_required = models.IntegerField()
     price = models.IntegerField()
 

@@ -9,15 +9,15 @@ class Character(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, unique=True)
     max_health = models.IntegerField(default=50)
-    max_mana = models.IntegerField(default=30)
+    max_mana = models.IntegerField(default=20)
     strength = models.IntegerField(default=1)
     intelligence = models.IntegerField(default=1)
     experience = models.IntegerField(default=1)
     level = models.IntegerField(default=1)
     gold = models.IntegerField(default=1)
     weapon_equipped = models.ForeignKey(Weapon, on_delete=models.CASCADE, default=1)
-    armor_equipped = models.ForeignKey(Armor, on_delete=models.CASCADE, blank=True, null=True)
-    spell_equipped = models.ManyToManyField(Spell, blank=True)
+    armor_equipped = models.ForeignKey(Armor, on_delete=models.CASCADE, default=1)
+    spell_equipped = models.ManyToManyField(Spell, default=1)
 
     objects = models.Manager()
 
