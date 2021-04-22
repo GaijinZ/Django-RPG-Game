@@ -1,0 +1,22 @@
+
+
+
+{% block content %}
+
+<h4>Weapon</h4>
+{% for weapon in weapon_equipped %}
+    <a href="{% url 'items:weapon-details' weapon.pk %}"><h4>{{ weapon }}</h4></a>
+{% endfor %}
+
+{% for armor in armor_equipped %}
+    <a href="{% url 'items:armor-details' armor.pk %}"><h4>{{ armor }}</h4></a>
+{% endfor %}
+
+{% for spell in spell_equipped %}
+    <a href="{% url 'items:spell-details' spell.pk %}"><h4>{{ spell }}</h4></a>
+{% endfor %}
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

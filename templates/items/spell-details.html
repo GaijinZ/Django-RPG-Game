@@ -1,0 +1,17 @@
+
+
+
+{% block content %}
+
+{% for spell in spell_details %}
+    <h4>{{ spell.name }}</h4>
+    <h5>Minimum damage - {{ spell.min_spell_dmg }}</h5>
+    <h5>Maximum damage - {{ spell.max_spell_dmg }}</h5>
+    <h5>Mana cost - {{ spell.mana_cost }}</h5>
+    <h5>Damage type - {{ spell.dmg_type }}</h5>
+{% endfor %}
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

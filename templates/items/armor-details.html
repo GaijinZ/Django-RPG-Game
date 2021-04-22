@@ -1,0 +1,15 @@
+
+
+
+{% block content %}
+
+{% for armor in armor_details %}
+    <h4>{{ armor.name }}</h4>
+    <h5>Defence - {{ armor.defence }}</h5>
+    <h5>Health increase - {{ armor.health }}</h5>
+{% endfor %}
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

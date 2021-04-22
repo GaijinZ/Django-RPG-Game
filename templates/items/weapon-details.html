@@ -1,0 +1,15 @@
+
+
+
+{% block content %}
+
+{% for weapon in weapon_details %}
+    <h4>{{ weapon.name }}</h4>
+    <h5>Minimum damage - {{ weapon.min_melee_dmg }}</h5>
+    <h5>Maximum damage - {{ weapon.max_melee_dmg }}</h5>
+{% endfor %}
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}
