@@ -44,9 +44,12 @@ class CharacterInventory(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        weapon_equipped = Weapon.objects.filter(name__in=Character.objects.values_list('weapon_equipped__name', flat=True))
-        armor_equipped = Armor.objects.filter(name__in=Character.objects.values_list('armor_equipped__name', flat=True))
-        spell_equipped = Spell.objects.filter(name__in=Character.objects.values_list('spell_equipped__name', flat=True))
+        weapon_equipped = Weapon.objects.filter(
+            name__in=Character.objects.values_list('weapon_equipped__name', flat=True))
+        armor_equipped = Armor.objects.filter(
+            name__in=Character.objects.values_list('armor_equipped__name', flat=True))
+        spell_equipped = Spell.objects.filter(
+            name__in=Character.objects.values_list('spell_equipped__name', flat=True))
 
         context['weapon_equipped'] = weapon_equipped
         context['armor_equipped'] = armor_equipped
