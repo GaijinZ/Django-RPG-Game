@@ -1,0 +1,16 @@
+
+
+
+
+{% block content %}
+
+{% for potion in potion_details %}
+    <h4>{{ potion.potion.name }}</h4>
+    <h5>Amount - {{ potion.amount }}</h5>
+
+{% endfor %}
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

@@ -16,6 +16,10 @@
     <a href="{% url 'items:spell-details' spell.pk %}"><h4>{{ spell }}</h4></a>
 {% endfor %}
 
+{% for potion in potions_equipped %}
+    <a href="{% url 'items:potion-details' potion.pk %}"><h4>{{ potion }}</h4></a>
+{% endfor %}
+
 <br><br>
 <a href="{% url 'game:home' %}">Home</a>
 

@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 from accounts.models import Account
-from items.models import Weapon, Armor, Spell
+from items.models import Weapon, Armor, Spell, Potion
 
 
 class Character(models.Model):
@@ -18,6 +18,7 @@ class Character(models.Model):
     weapon_equipped = models.ForeignKey(Weapon, on_delete=models.CASCADE, default=1)
     armor_equipped = models.ForeignKey(Armor, on_delete=models.CASCADE, default=1)
     spell_equipped = models.ManyToManyField(Spell, default=1)
+    potions_equipped = models.ManyToManyField(Potion, through='PotionQuantity')
 
     objects = models.Manager()
 
@@ -26,3 +27,17 @@ class Character(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class PotionQuantity(models.Model):
+    character = models.ForeignKey(Character, on_delete=models.CASCADE)
+    potion = models.ForeignKey(Potion, on_delete=models.CASCADE)
+    amount = models.IntegerField(default=1)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.character)
+
+    class Meta:
+        unique_together = [['character', 'potion']]

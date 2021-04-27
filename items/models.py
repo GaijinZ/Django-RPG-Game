@@ -43,4 +43,11 @@ class Armor(models.Model):
 
 
 class Potion(models.Model):
-    pass
+    name = models.CharField(max_length=50)
+    level_required = models.IntegerField()
+    price = models.IntegerField()
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return self.name

@@ -12,7 +12,7 @@
     <h5>Level required - {{ weapon.level_required }}</h5>
     <h5>Price - {{ weapon.price }} gold</h5>
 
-    <a href="{% url 'items:buy-item' 'weapon' weapon.pk %}"><h4>Buy</h4></a>
+    <a href="{% url 'items:buy-items' 'weapon' weapon.pk %}"><h4>Buy</h4></a>
     <br>
 {% endfor %}
 
@@ -26,7 +26,7 @@
     <h5>Level required - {{ armor.level_required }}</h5>
     <h5>Price - {{ armor.price }}</h5>
 
-    <a href="{% url 'items:buy-item' 'armor' armor.pk %}"><h4>Buy</h4></a>
+    <a href="{% url 'items:buy-items' 'armor' armor.pk %}"><h4>Buy</h4></a>
     <br>
 {% endfor %}
 
@@ -40,7 +40,14 @@
     <h5>Level required - {{ spell.level_required }}</h5>
     <h5>Price - {{ spell.price }}</h5>
 
-    <a href="{% url 'items:buy-item' 'spell' spell.pk %}"><h4>Buy</h4></a>
+    <a href="{% url 'items:buy-items' 'spell' spell.pk %}"><h4>Buy</h4></a>
+    <br>
+{% endfor %}
+
+{% for potion in potions_to_buy %}
+    <h5>{{ potion.name }}</h5>
+
+    <a href="{% url 'items:buy-potion' potion.pk %}"><h4>Buy</h4></a>
     <br>
 {% endfor %}
 

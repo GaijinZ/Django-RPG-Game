@@ -5,28 +5,35 @@
 <h2>Hero details</h2>
 
 {% for character in character_details %}
-    <h4>Name</h4>
-    {{ character.name }}
-    <h4>Health</h4>
-    {{ character.max_health }}
-    <h4>Mana</h4>
-    {{ character.max_mana }}
-    <h4>Strength</h4>
-    {{ character.strength }}
-    <h4>Intelligence</h4>
-    {{ character.intelligence }}
-    <h4>Exp</h4>
-    {{ character.experience }}
-    <h4>Level</h4>
-    {{ character.level }}
-    <h4>Gold</h4>
-    {{ character.gold }}
-    <h4>Weapon</h4>
-    {{ character.weapon_equipped.name }}
-    <h4>Armor</h4>
-    {{ character.armor_equipped.name }}
-    <h4>Spells</h4>
-    {{ character.spell_equipped.name }}
+    <h3>Name</h3>
+    <h5>{{ character.name }}</h5>
+    <h3>Health</h3>
+    <h5>{{ character.max_health }}</h5>
+    <h3>Mana</h3>
+    <h5>{{ character.max_mana }}</h5>
+    <h3>Strength</h3>
+    <h5>{{ character.strength }}</h5>
+    <h3>Intelligence</h3>
+    <h5>{{ character.intelligence }}</h5>
+    <h3>Exp</h3>
+    <h5>{{ character.experience }}</h5>
+    <h3>Level</h3>
+    <h5>{{ character.level }}</h5>
+    <h3>Gold</h3>
+    <h5>{{ character.gold }}</h5>5
+    <h3>Weapon</h3>
+    <h5>{{ character.weapon_equipped.name }}</h5>
+    <h3>Armor</h3>
+    <h5>{{ character.armor_equipped.name }}</h5>
+{% endfor %}
+    <h3>Spells</h3>
+{% for spell in character_spells %}
+    <h5>{{ spell.name }}</h5>
+{% endfor %}
+    <h3>Potions</h3>
+{% for potion in character_potions %}
+    <h5>{{ potion.potion.name }}</h5>
+    <h5>Amount: {{ potion.amount}}</h5>
 {% endfor %}
 <br><br>
 <a href="{% url 'game:home' %}">Home</a>

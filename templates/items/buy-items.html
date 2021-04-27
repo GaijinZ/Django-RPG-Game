@@ -4,11 +4,11 @@
 
 {% block content %}
 
-<h2>Buy {{ item_type }}</h2>
+<h2>Buy {{ item }}</h2>
 
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.field.as_hidden }}
     <button type="submit">Buy</button>
     <br><br>
     <a href="{% url 'game:home' %}">Home</a>

@@ -2,8 +2,8 @@ from django.views.generic import CreateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import CharacterForm
-from .models import Character
-from items.models import Weapon, Armor, Spell
+from .models import Character, PotionQuantity
+from items.models import Weapon, Armor, Spell, Potion
 
 
 class CharacterCreationView(LoginRequiredMixin, CreateView):
@@ -32,8 +32,12 @@ class CharacterDetailsView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         character_details = Character.objects.filter(id=self.kwargs['pk'])
+        character_spells = Spell.objects.filter(character__in=character_details)
+        character_potions = PotionQuantity.objects.filter(character__in=character_details)
 
         context['character_details'] = character_details
+        context['character_spells'] = character_spells
+        context['character_potions'] = character_potions
         return context
 
 
@@ -50,8 +54,11 @@ class CharacterInventory(LoginRequiredMixin, ListView):
             name__in=Character.objects.values_list('armor_equipped__name', flat=True))
         spell_equipped = Spell.objects.filter(
             name__in=Character.objects.values_list('spell_equipped__name', flat=True))
+        potions_equipped = Potion.objects.filter(
+            name__in=Character.objects.values_list('potions_equipped__name', flat=True))
 
         context['weapon_equipped'] = weapon_equipped
         context['armor_equipped'] = armor_equipped
         context['spell_equipped'] = spell_equipped
+        context['potions_equipped'] = potions_equipped
         return context
