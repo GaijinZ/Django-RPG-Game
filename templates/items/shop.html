@@ -3,6 +3,11 @@
 
 {% block content %}
 
+{% for char in character %}
+    <h4>Name: {{ char.name }}</h4>
+    <h4>Gold: {{ char.gold }}</h4>
+{% endfor %}
+<br>
 <h4>Weapons</h4>
 <br>
 {% for weapon in weapons_to_buy %}

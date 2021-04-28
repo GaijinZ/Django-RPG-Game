@@ -8,7 +8,7 @@
     <a href="{% url 'accounts:sign-out-redirect' %}"><h5>Sign out</h5></a>
     <a href="{% url 'characters:character-create' %}"><h5>Create a hero</h5></a>
     <a href="{% url 'characters:character-list' user.pk %}"><h5>My heros</h5></a>
-    <a href="{% url 'items:shop' %}"><h5>Shop</h5></a>
+    <a href="{% url 'items:shop' user.pk %}"><h5>Shop</h5></a>
     <a href="{% url 'characters:character-inventory' user.pk %}"><h5>My Inventory</h5></a>
     <a href="{% url 'game:play' %}"><h5>Play</h5></a>
 {% else %}

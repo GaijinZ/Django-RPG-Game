@@ -5,7 +5,7 @@ from .views import ShopView, WeaponDetails, ArmorDetails, SpellDetails, PotionDe
 app_name = 'items'
 
 urlpatterns = [
-    path('shop/', ShopView.as_view(), name='shop'),
+    path('shop/<int:pk>/', ShopView.as_view(), name='shop'),
     path('buy-items/<str:item_type>/<int:pk>/', BuyItems.as_view(), name='buy-items'),
     path('buy-potion/<int:pk>/', BuyPotion.as_view(), name='buy-potion'),
     path('weapon-details/<int:pk>/', WeaponDetails.as_view(), name='weapon-details'),
