@@ -38,25 +38,25 @@ class BuyItems(LoginRequiredMixin, TemplateView):
     template_name = 'items/buy-items.html'
 
     def post(self, request, item_type=None, *args, **kwargs):
-        item = None
+        chosen_item = None
         character = Character.objects.get(user=request.user)
         if item_type == 'weapon':
-            item = Weapon.objects.get(id=self.kwargs['pk'])
-            setattr(character, 'weapon_equipped_id', item.id)
+            chosen_item = Weapon.objects.get(id=self.kwargs['pk'])
+            setattr(character, 'weapon_equipped_id', chosen_item.id)
         elif item_type == 'armor':
-            item = Armor.objects.get(id=self.kwargs['pk'])
-            setattr(character, 'armor_equipped_id', item.id)
+            chosen_item = Armor.objects.get(id=self.kwargs['pk'])
+            setattr(character, 'armor_equipped_id', chosen_item.id)
         elif item_type == 'spell':
-            item = Spell.objects.get(id=self.kwargs['pk'])
-            character.spell_equipped.add(item)
+            chosen_item = Spell.objects.get(id=self.kwargs['pk'])
+            character.spell_equipped.add(chosen_item)
         form = BuyItemForm(request.POST)
         if request.method == 'POST':
-            if item.price <= character.gold and item.level_required <= character.level:
-                character.gold = F('gold') - item.price
+            if chosen_item.price <= character.gold and chosen_item.level_required <= character.level:
+                character.gold = F('gold') - chosen_item.price
                 character.save()
                 return HttpResponseRedirect(reverse('items:shop'))
             form = BuyItemForm()
-        args = {'form': form, 'item': item}
+        args = {'form': form, 'item': chosen_item}
         return render(request, self.template_name, args)
 
 
@@ -65,20 +65,20 @@ class BuyPotion(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         character = Character.objects.get(user=request.user)
-        potion = Potion.objects.get(id=self.kwargs['pk'])
-        potion_amount = PotionQuantity.objects.filter(potion=potion)
+        chosen_potion = Potion.objects.get(id=self.kwargs['pk'])
+        potion_amount = PotionQuantity.objects.filter(potion=chosen_potion)
         form = BuyItemForm(request.POST)
         if request.method == 'POST':
-            if potion.price <= character.gold:
-                character.gold = F('gold') - potion.price
-                character.potions_equipped.add(potion)
-                for amount in potion_amount:
-                    amount.amount += 1
-                    amount.save()
+            if chosen_potion.price <= character.gold:
+                character.gold = F('gold') - chosen_potion.price
+                character.potions_equipped.add(chosen_potion)
+                for potion in potion_amount:
+                    potion.amount += 1
+                    potion.save()
                 character.save()
                 return HttpResponseRedirect(reverse('items:shop'))
             form = BuyItemForm()
-        args = {'form': form, 'item': potion}
+        args = {'form': form, 'item': chosen_potion}
         return render(request, self.template_name, args)
 
 

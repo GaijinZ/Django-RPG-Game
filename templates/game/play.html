@@ -5,6 +5,18 @@
 
 play the game
 
+{% for player in current_player %}
+    <h5>{{ player.name }}</h5>
+{% endfor %}
+<br>
+<h4>Attack</h4>
+<br>
 
+<h5>{{ current_monster.name }}</h5>
+<h5>{{ current_monster.health }}</h5>
+<h5>{{ current_monster.immune }}</h5>
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
 
 {% endblock %}
