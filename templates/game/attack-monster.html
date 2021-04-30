@@ -1,0 +1,16 @@
+
+
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.field.as_hidden }}
+    <button type="submit">Attack</button>
+    <br><br>
+    <a href="{% url 'game:home' %}">Home</a>
+</form>
+
+
+{% endblock %}

@@ -49,14 +49,12 @@ class BuyItems(LoginRequiredMixin, TemplateView):
         elif item_type == 'spell':
             chosen_item = Spell.objects.get(id=self.kwargs['pk'])
             character.spell_equipped.add(chosen_item)
-        form = BuyItemForm(request.POST)
         if request.method == 'POST':
             if chosen_item.price <= character.gold and chosen_item.level_required <= character.level:
                 character.gold = F('gold') - chosen_item.price
                 character.save()
                 return HttpResponseRedirect(reverse('items:shop'))
-            form = BuyItemForm()
-        args = {'form': form, 'item': chosen_item}
+        args = {'item': chosen_item}
         return render(request, self.template_name, args)
 
 

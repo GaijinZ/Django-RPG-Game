@@ -7,10 +7,10 @@ play the game
 
 {% for player in current_player %}
     <h5>{{ player.name }}</h5>
+<br>
+<a href="{% url 'game:attack-monster' player.pk %}"><h4>Attack with {{ player.weapon_equipped.name }}</h4></a>
+<br>
 {% endfor %}
-<br>
-<h4>Attack</h4>
-<br>
 
 <h5>{{ current_monster.name }}</h5>
 <h5>{{ current_monster.health }}</h5>
