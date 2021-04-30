@@ -3,18 +3,20 @@
 
 {% block content %}
 
-play the game
-
 {% for player in current_player %}
+    <a href="{% url 'items:shop' player.pk %}"><h5>Shop</h5></a>
+    <br>
     <h5>{{ player.name }}</h5>
-<br>
-<a href="{% url 'game:attack-monster' player.pk %}"><h4>Attack with {{ player.weapon_equipped.name }}</h4></a>
-<br>
+    <h5>Health - {{ player.current_health }}</h5>
+    <h5>Mana - {{ player.max_mana }}</h5>
+    <br>
+    <a href="{% url 'game:player-attack-monster' player.pk %}"><h4>Attack with {{ player.weapon_equipped.name }}</h4></a>
+    <br>
 {% endfor %}
 
 <h5>{{ current_monster.name }}</h5>
-<h5>{{ current_monster.health }}</h5>
-<h5>{{ current_monster.immune }}</h5>
+<h5>Health - {{ current_monster.health }}</h5>
+<h5>Immune - {{ current_monster.immune }}</h5>
 
 <br><br>
 <a href="{% url 'game:home' %}">Home</a>

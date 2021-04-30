@@ -3,11 +3,13 @@
 
 
 {% block content %}
-
+<h4>Monster attacked you</h4>
 <form method="POST">
     {% csrf_token %}
     {{ form.field.as_hidden }}
-    <button type="submit">Attack</button>
+    <button type="submit">Fight back</button>
+    <br><br>
+    <br><br>
     <br><br>
     <a href="{% url 'game:home' %}">Home</a>
 </form>

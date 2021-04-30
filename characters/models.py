@@ -9,6 +9,7 @@ class Character(models.Model):
     user = models.ForeignKey(Account, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, unique=True)
     max_health = models.IntegerField(default=50)
+    current_health = models.IntegerField(default=50)
     max_mana = models.IntegerField(default=20)
     strength = models.IntegerField(default=1)
     intelligence = models.IntegerField(default=1)
