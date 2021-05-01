@@ -7,19 +7,21 @@
 {% for weapon in weapon_equipped %}
     <a href="{% url 'items:weapon-details' weapon.pk %}"><h4>{{ weapon }}</h4></a>
 {% endfor %}
-
+<br>
+<h4>Armor</h4>
 {% for armor in armor_equipped %}
     <a href="{% url 'items:armor-details' armor.pk %}"><h4>{{ armor }}</h4></a>
 {% endfor %}
-
-{% for spell in spell_equipped %}
-    <a href="{% url 'items:spell-details' spell.pk %}"><h4>{{ spell }}</h4></a>
+<br>
+{% for spell in object_list %}
+    <a href="{% url 'items:potions-available' spell.pk %}"><h4>Spells</h4></a>
+{% endfor %}
+<br>
+{% for potion in object_list %}
+    <a href="{% url 'items:potions-available' potion.pk %}"><h4>Potions</h4></a>
 {% endfor %}
 
-{% for potion in potions_equipped %}
-    <a href="{% url 'items:potion-details' potion.pk %}"><h4>{{ potion }}</h4></a>
-{% endfor %}
-
+<br><br>
 <br><br>
 <a href="{% url 'game:home' %}">Home</a>
 
