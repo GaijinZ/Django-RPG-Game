@@ -1,0 +1,18 @@
+
+
+
+{% block content %}
+
+{% for potion in object_list %}
+    <a href="{% url 'items:use-potion' potion.name potion.pk %}"><h4>{{ potion.name }}</h4></a>
+    <h5>{{ potion.description }}</h5>
+{% endfor %}
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+<a href="{% url 'game:play' user.pk %}">Go back</a>
+
+{% endblock %}

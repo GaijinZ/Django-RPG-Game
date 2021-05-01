@@ -29,8 +29,7 @@ class PlayView(TemplateView):
         current_monster = Monster.objects.first()
 
         context['current_player'] = current_player
-        context['character_spells'] = character_spells
-        context['character_potions'] = character_potions
+
         context['current_monster'] = current_monster
         return context
 
@@ -51,6 +50,7 @@ class PlayerAttackMonster(TemplateView):
                 spell = character.spell_equipped.get(id=self.kwargs['pk'])
                 if spell.dmg_type != monster.immune:
                     dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
+                    character.current_mana -= spell.mana
                     monster.health -= dmg
             if monster.health <= 0:
                 Monster.objects.filter(pk=monster.pk).delete()

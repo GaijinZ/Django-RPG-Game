@@ -11,6 +11,7 @@ class Character(models.Model):
     max_health = models.IntegerField(default=50)
     current_health = models.IntegerField(default=50)
     max_mana = models.IntegerField(default=20)
+    current_mana = models.IntegerField(default=20)
     strength = models.IntegerField(default=1)
     intelligence = models.IntegerField(default=1)
     experience = models.IntegerField(default=1)

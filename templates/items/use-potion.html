@@ -4,12 +4,12 @@
 
 {% block content %}
 
-<h4>You are attacking monster</h4>
+<h4>Use potion</h4>
 
 <form method="POST">
     {% csrf_token %}
     {{ form.field.as_hidden }}
-    <button type="submit">Attack</button>
+    <button type="submit">Use</button>
     <br><br>
     <br><br>
     <br><br>
