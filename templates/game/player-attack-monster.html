@@ -3,7 +3,9 @@
 
 
 {% block content %}
+
 <h4>You are attacking monster</h4>
+
 <form method="POST">
     {% csrf_token %}
     {{ form.field.as_hidden }}
@@ -11,8 +13,9 @@
     <br><br>
     <br><br>
     <br><br>
-    <a href="{% url 'game:home' %}">Home</a>
-</form>
+    <br><br>
 
+    <a href="{% url 'game:play' user.pk %}">Go back</a>
+</form>
 
 {% endblock %}

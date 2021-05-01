@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.db.models import F
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Weapon, Armor, Spell, Potion
@@ -78,6 +78,19 @@ class BuyPotion(LoginRequiredMixin, TemplateView):
             form = BuyItemForm()
         args = {'form': form, 'item': chosen_potion}
         return render(request, self.template_name, args)
+
+
+class SpellsAvailable(LoginRequiredMixin, ListView):
+    template_name = 'items/spells-available.html'
+    model = Spell
+
+    def get_queryset(self):
+        return Spell.objects.filter(character=self.kwargs['pk'])
+
+
+class PotionsAvailable(LoginRequiredMixin, ListView):
+    template_name = 'items/potions-available.hmtl'
+    model = Potion
 
 
 class WeaponDetails(LoginRequiredMixin, DetailView):

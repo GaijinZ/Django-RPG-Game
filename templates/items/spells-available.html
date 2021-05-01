@@ -1,0 +1,21 @@
+
+
+
+{% block content %}
+
+{% for spell in object_list %}
+    <a href="{% url 'game:player-attack-monster' 'spell' spell.pk %}"><h3>{{ spell.name }}</h3></a>
+    <h5>Min dmg - {{ spell.min_spell_dmg }}</h5>
+    <h5>Maxdmg - {{ spell.max_spell_dmg }}</h5>
+    <h5>Mana cost - {{ spell.mana_cost }}</h5>
+    <h5>Dmg type - {{ spell.dmg_type }}</h5>
+{% endfor %}
+
+<br><br>
+<br><br>
+<br><br>
+<br><br>
+
+<a href="{% url 'game:play' user.pk %}">Go back</a>
+
+{% endblock %}

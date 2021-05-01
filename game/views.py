@@ -1,6 +1,6 @@
 import random
 
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -38,14 +38,20 @@ class PlayView(TemplateView):
 class PlayerAttackMonster(TemplateView):
     template_name = 'game/player-attack-monster.html'
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, attack_type=None, *args, **kwargs):
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.first()
         if request.method == 'POST':
-            character_min_dmg = character.weapon_equipped.min_melee_dmg
-            character_max_dmg = character.weapon_equipped.max_melee_dmg
-            dmg = random.randint(character_min_dmg, character_max_dmg)
-            monster.health -= dmg
+            if attack_type == 'weapon':
+                weapon_min_dmg = character.weapon_equipped.min_melee_dmg
+                weapon_max_dmg = character.weapon_equipped.max_melee_dmg
+                dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
+                monster.health -= dmg
+            if attack_type == 'spell':
+                spell = character.spell_equipped.get(id=self.kwargs['pk'])
+                if spell.dmg_type != monster.immune:
+                    dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
+                    monster.health -= dmg
             if monster.health <= 0:
                 Monster.objects.filter(pk=monster.pk).delete()
                 return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
