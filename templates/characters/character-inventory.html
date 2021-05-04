@@ -14,7 +14,7 @@
 {% endfor %}
 <br>
 {% for spell in object_list %}
-    <a href="{% url 'items:potions-available' spell.pk %}"><h4>Spells</h4></a>
+    <a href="{% url 'items:spells-available' spell.pk %}"><h4>Spells</h4></a>
 {% endfor %}
 <br>
 {% for potion in object_list %}

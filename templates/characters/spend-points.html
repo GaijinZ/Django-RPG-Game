@@ -1,0 +1,20 @@
+
+
+
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+</form>
+
+<br><br>
+<a href="{% url 'game:home' %}">Home</a>
+
+{% endblock %}

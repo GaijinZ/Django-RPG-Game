@@ -11,6 +11,8 @@
     <h5>{{ character.max_health }}</h5>
     <h3>Mana</h3>
     <h5>{{ character.max_mana }}</h5>
+    <a href="{% url 'characters:spend-points' character.pk %}"><h3>Attribute points to spend</h3>
+        <h5>{{ character.attribute_points }}</h5></a>
     <h3>Strength</h3>
     <h5>{{ character.strength }}</h5>
     <h3>Intelligence</h3>

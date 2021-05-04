@@ -10,8 +10,10 @@
     <br>
     <br>
     <h5>{{ player.name }}</h5>
+    <h5> Level - {{ player.level }}</h5>
+    <h5>Experience - {{ player.experience }}</h5>
     <h5>Health - {{ player.current_health }}</h5>
-    <h5>Mana - {{ player.max_mana }}</h5>
+    <h5>Mana - {{ player.current_mana }}</h5>
     <br>
     <a href="{% url 'game:player-attack-monster' 'weapon' player.pk %}"><h4>Attack with {{ player.weapon_equipped.name }}</h4></a>
     <br>

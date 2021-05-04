@@ -25,6 +25,8 @@ class Monster(models.Model):
     immune = models.CharField(max_length=50, choices=IMMUNE_TYPE, default=IMMUNE_TYPE[0][0])
     frozen = models.BooleanField(default=False)
     type = models.CharField(max_length=50, choices=MONSTER_TYPE)
+    experience_given = models.IntegerField()
+    gold_given = models.IntegerField()
 
     objects = models.Manager()
 
@@ -36,9 +38,11 @@ class Monster(models.Model):
 
         SPIDER_ATTRIBUTES = {
             'name': 'Spider',
-            'health': random.randint(10, 26),
+            'health': random.randint(5, 6),
             'min_dmg': 5,
             'max_dmg': 10,
+            'experience_given': random.randint(5, 15),
+            'gold_given': random.randint(5, 10),
             'type': 'Spider'
         }
 
@@ -47,6 +51,8 @@ class Monster(models.Model):
             'health': random.randint(25, 46),
             'min_dmg': 10,
             'max_dmg': 20,
+            'experience_given': random.randint(15, 25),
+            'gold_given': random.randint(10, 20),
             'immune': 'Fire',
             'type': 'Rat'
         }
@@ -56,6 +62,8 @@ class Monster(models.Model):
             'health': random.randint(45, 66),
             'min_dmg': 25,
             'max_dmg': 35,
+            'experience_given': random.randint(25, 35),
+            'gold_given': random.randint(20, 35),
             'immune': 'Cold',
             'type': 'Troll'
         }
@@ -65,6 +73,8 @@ class Monster(models.Model):
             'health': random.randint(65, 100),
             'min_dmg': 40,
             'max_dmg': 60,
+            'experience_given': random.randint(35, 50),
+            'gold_given': random.randint(35, 50),
             'immune': 'Fire',
             'type': 'Ogre'
         }
