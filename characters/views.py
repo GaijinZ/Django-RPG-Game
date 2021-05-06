@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.views.generic import CreateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -80,6 +79,10 @@ class SpendPoints(LoginRequiredMixin, CreateView):
                 intelligence = form.cleaned_data['intelligence']
                 character.strength += strength
                 character.intelligence += intelligence
+                character.max_health += (2 * strength)
+                character.max_mana += (2 * intelligence)
+                character.weapon_equipped.max_melee_dmg += strength
+                character.weapon_equipped.max_spell_dmg += intelligence
                 character.attribute_points -= strength
                 character.attribute_points -= intelligence
                 character.save()

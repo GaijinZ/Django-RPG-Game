@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models import Sum
 
 from .models import Character
 
