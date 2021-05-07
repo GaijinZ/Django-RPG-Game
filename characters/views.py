@@ -72,6 +72,7 @@ class SpendPoints(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         request = self.request
         character = Character.objects.get(user=request.user)
+        spell_name = Spell.objects.filter(character=character)
         if request.method == 'POST':
             form = SpendPointsForm(request.POST)
             if form.is_valid():
@@ -82,9 +83,12 @@ class SpendPoints(LoginRequiredMixin, CreateView):
                 character.max_health += (2 * strength)
                 character.max_mana += (2 * intelligence)
                 character.weapon_equipped.max_melee_dmg += strength
-                character.weapon_equipped.max_spell_dmg += intelligence
+                for spell in spell_name:
+                    spell.max_spell_dmg += intelligence
                 character.attribute_points -= strength
                 character.attribute_points -= intelligence
+                character.current_health = character.max_health
+                character.current_mana = character.max_mana
                 character.save()
                 return HttpResponseRedirect(reverse('characters:character-details', args=[character.pk]))
 
