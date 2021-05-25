@@ -1,4 +1,5 @@
 import random
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.http import HttpResponseRedirect
@@ -8,6 +9,7 @@ from django.views.generic import TemplateView
 
 from monsters.models import Monster
 from characters.models import Character
+from game.models import PlayerVsPlayer
 
 
 class HomeView(TemplateView):
@@ -86,6 +88,31 @@ class MonsterAttackPlayer(LoginRequiredMixin, TemplateView):
             character.save()
             return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
         return render(request, self.template_name)
+
+
+class LobbyView(TemplateView):
+    template_name = 'game/lobby.html'
+    model = Character
+
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # we're creating a list of games that contains just the id (for the link) and the creator
+        available_games = [{'creator': game.creator.username, 'id': game.pk} for game in PlayerVsPlayer.get_available_games()]
+        # for the player's games, we're returning a list of games with the opponent and id
+        player_games = PlayerVsPlayer.get_games_for_player(Character.objects.get(user=self.request.user))
+
+        context['available_games'] = available_games
+        context['player_games'] = player_games
+
+        return context
+
+
+class PlayerVsPlayerView(TemplateView):
+    template_name = 'game/player-vs-player.html'
 
 
 class CharacterDeath(LoginRequiredMixin, TemplateView):

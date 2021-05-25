@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import HomeView, PlayView, PlayerAttackMonster, MonsterAttackPlayer, CharacterDeath
+from .views import HomeView, PlayView, PlayerAttackMonster, MonsterAttackPlayer, \
+    LobbyView, PlayerVsPlayerView, CharacterDeath
 
 app_name = 'game'
 
@@ -10,4 +11,6 @@ urlpatterns = [
     path('player-attack-monster/<str:attack_type>/<int:pk>/', PlayerAttackMonster.as_view(), name='player-attack-monster'),
     path('monster-attack-player/<int:pk>/', MonsterAttackPlayer.as_view(), name='monster-attack-player'),
     path('character-death/<int:pk>/', CharacterDeath.as_view(), name='character-death'),
+    path('lobby/', LobbyView.as_view(), name='lobby'),
+    path('player-vs-player/', PlayerVsPlayerView.as_view(), name='player-vs-player')
 ]

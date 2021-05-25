@@ -10,10 +10,11 @@
     <a href="{% url 'characters:character-list' user.pk %}"><h5>My heros</h5></a>
     <a href="{% url 'items:shop' user.pk %}"><h5>Shop</h5></a>
     <a href="{% url 'characters:character-inventory' user.pk %}"><h5>My Inventory</h5></a>
-    <a href="{% url 'game:play' user.pk %}"><h5>Play</h5></a>
+    <a href="{% url 'game:play' user.pk %}"><h5>Play vs monsters</h5></a>
 {% else %}
     <a href="{% url 'accounts:sign-up' %}"><h5>Sign up!</h5></a>
     <a href="{% url 'accounts:sign-in' %}"><h5>Sign in!</h5></a>
 {% endif %}
+    <a href="{% url 'game:lobby' %}"><h5>Player vs Player</h5></a>
 
 {% endblock %}
