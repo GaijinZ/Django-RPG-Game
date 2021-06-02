@@ -34,35 +34,44 @@ class PlayView(LoginRequiredMixin, TemplateView):
 class PlayerAttackMonster(LoginRequiredMixin, TemplateView):
     template_name = 'game/player-attack-monster.html'
 
+    def weapon_attack(self, character, monster):
+        weapon_min_dmg = character.weapon_equipped.min_melee_dmg
+        weapon_max_dmg = character.weapon_equipped.max_melee_dmg
+        dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
+        monster.health -= dmg
+
+    def spell_attack(self, character, monster):
+        spell = character.spell_equipped.get(id=self.kwargs['pk'])
+        if character.current_mana >= spell.mana_cost:
+            if spell.dmg_type != monster.immune:
+                dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
+                character.current_mana -= spell.mana_cost
+                monster.health -= dmg
+                character.save()
+            else:
+                character.current_mana -= spell.mana_cost
+                character.save()
+
+    def monster_defeat(self, character, monster):
+        character.experience += monster.experience_given
+        character.gold += monster.gold_given
+        Monster.objects.filter(pk=monster.pk).delete()
+        if character.experience >= character.exp_to_lvl_up:
+            character.level += 1
+            character.attribute_points += 2
+            character.exp_to_lvl_up *= 1.5
+        character.save()
+
     def post(self, request, attack_type=None, *args, **kwargs):
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.first()
         if request.method == 'POST':
             if attack_type == 'weapon':
-                weapon_min_dmg = character.weapon_equipped.min_melee_dmg
-                weapon_max_dmg = character.weapon_equipped.max_melee_dmg
-                dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
-                monster.health -= dmg
+                self.weapon_attack(character, monster)
             if attack_type == 'spell':
-                spell = character.spell_equipped.get(id=self.kwargs['pk'])
-                if character.current.mana >= spell.mana:
-                    if spell.dmg_type != monster.immune:
-                        dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
-                        character.current_mana -= spell.mana_cost
-                        monster.health -= dmg
-                        character.save()
-                    else:
-                        character.current_mana -= spell.mana_cost
-                        character.save()
+                self.spell_attack(character, monster)
             if monster.health <= 0:
-                character.experience += monster.experience_given
-                character.gold += monster.gold_given
-                Monster.objects.filter(pk=monster.pk).delete()
-                if character.experience >= character.exp_to_lvl_up:
-                    character.level += 1
-                    character.attribute_points += 2
-                    character.exp_to_lvl_up *= 1.5
-                character.save()
+                self.monster_defeat(character, monster)
                 return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
             monster.save()
             return HttpResponseRedirect(reverse('game:monster-attack-player', args=[request.user.pk]))
@@ -72,6 +81,13 @@ class PlayerAttackMonster(LoginRequiredMixin, TemplateView):
 class MonsterAttackPlayer(LoginRequiredMixin, TemplateView):
     template_name = 'game/monster-attack-player.html'
 
+    def player_defeat(self, character, monster):
+        character.experience *= 0.80
+        character.current_health = character.max_health
+        character.current_mana = character.max_mana
+        character.save()
+        Monster.objects.filter(pk=monster.pk).delete()
+
     def post(self, request, *args, **kwargs):
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.first()
@@ -79,11 +95,7 @@ class MonsterAttackPlayer(LoginRequiredMixin, TemplateView):
             monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
             character.current_health -= monster_dmg
             if character.current_health <= 0:
-                character.experience *= 0.80
-                character.current_health = character.max_health
-                character.current_mana = character.max_mana
-                character.save()
-                Monster.objects.filter(pk=monster.pk).delete()
+                self.player_defeat(character, monster)
                 return HttpResponseRedirect(reverse('game:character-death', args=[request.user.pk]))
             character.save()
             return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
