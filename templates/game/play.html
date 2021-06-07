@@ -1,5 +1,5 @@
 
-
+<title>Fight</title>
 
 {% block content %}
 
@@ -7,25 +7,75 @@
     <a href="{% url 'items:shop' player.pk %}"><h5>Shop</h5></a>
     <br>
     <a href="{% url 'items:potions-available' player.pk %}"><h5>Use potion</h5></a>
-    <br>
-    <br>
+    <br><br>
     <h5>{{ player.name }}</h5>
     <h5> Level - {{ player.level }}</h5>
     <h5>Experience - {{ player.experience }}</h5>
     <h5>Health - {{ player.current_health }}</h5>
     <h5>Mana - {{ player.current_mana }}</h5>
     <br>
-    <a href="{% url 'game:player-attack-monster' 'weapon' player.pk %}"><h4>Attack with {{ player.weapon_equipped.name }}</h4></a>
-    <br>
-    <a href="{% url 'items:spells-available' player.pk %}"><h4>Attack with available spells</h4></a>
-    <br>
+    <form id="hit" method="POST">
+        {% csrf_token %}
+        <button id="btn">Attack with {{ player.weapon_equipped.name }}</button>
+    </form>
+        <br>
+        <button>Attack with available spells</button>
+        <br><br>
+    <h5>{{ current_monster.name }}</h5>
+    <h5 id="health">Health - {{ current_monster.health }}</h5>
+    <h5>Immune - {{ current_monster.immune }}</h5>
+
+    <br><br>
+    <a href="{% url 'game:home' %}">Home</a>
+
 {% endfor %}
 
-<h5>{{ current_monster.name }}</h5>
-<h5>Health - {{ current_monster.health }}</h5>
-<h5>Immune - {{ current_monster.immune }}</h5>
-
-<br><br>
-<a href="{% url 'game:home' %}">Home</a>
-
 {% endblock %}
+
+
+{% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken')
+
+    $(document).ready(function() {
+            $('#btn').click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        csrfmiddlewaretoken: csrftoken,
+                     },
+                    data: $('#hit').serialize(),
+                    success: function(response) {
+                        $(' #health').html('Health - ' + response.monster_health);
+                        console.log(response.dmg_done)
+                        alert('You are attacking monster for ' + response.dmg_done + ' health')
+                    }
+                });
+            });
+        });
+
+    </script>
+
+{% endblock javascript%}
+
+

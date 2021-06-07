@@ -2,7 +2,7 @@ import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.views.generic import TemplateView
@@ -30,16 +30,6 @@ class PlayView(LoginRequiredMixin, TemplateView):
         context['current_monster'] = current_monster
         return context
 
-
-class PlayerAttackMonster(LoginRequiredMixin, TemplateView):
-    template_name = 'game/player-attack-monster.html'
-
-    def weapon_attack(self, character, monster):
-        weapon_min_dmg = character.weapon_equipped.min_melee_dmg
-        weapon_max_dmg = character.weapon_equipped.max_melee_dmg
-        dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
-        monster.health -= dmg
-
     def spell_attack(self, character, monster):
         spell = character.spell_equipped.get(id=self.kwargs['pk'])
         if character.current_mana >= spell.mana_cost:
@@ -65,16 +55,17 @@ class PlayerAttackMonster(LoginRequiredMixin, TemplateView):
     def post(self, request, attack_type=None, *args, **kwargs):
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.first()
-        if request.method == 'POST':
-            if attack_type == 'weapon':
-                self.weapon_attack(character, monster)
-            if attack_type == 'spell':
-                self.spell_attack(character, monster)
+        if request.method == 'POST' and request.is_ajax():
             if monster.health <= 0:
                 self.monster_defeat(character, monster)
-                return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
+            weapon_min_dmg = character.weapon_equipped.min_melee_dmg
+            weapon_max_dmg = character.weapon_equipped.max_melee_dmg
+            dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
+            monster.health -= dmg
             monster.save()
-            return HttpResponseRedirect(reverse('game:monster-attack-player', args=[request.user.pk]))
+            data = {'monster_health': monster.health,
+                    'dmg_done': dmg}
+            return JsonResponse(data)
         return render(request, self.template_name)
 
 
@@ -113,7 +104,8 @@ class LobbyView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         # we're creating a list of games that contains just the id (for the link) and the creator
-        available_games = [{'creator': game.creator.username, 'id': game.pk} for game in PlayerVsPlayer.get_available_games()]
+        available_games = [{'creator': game.creator.username, 'id': game.pk} for game in
+                           PlayerVsPlayer.get_available_games()]
         # for the player's games, we're returning a list of games with the opponent and id
         player_games = PlayerVsPlayer.get_games_for_player(Character.objects.get(user=self.request.user))
 
