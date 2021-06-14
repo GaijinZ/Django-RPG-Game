@@ -1,7 +1,6 @@
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
@@ -51,21 +50,17 @@ class PlayView(LoginRequiredMixin, TemplateView):
     def monster_defeat(self, character, monster):
         character.experience += monster.experience_given
         character.gold += monster.gold_given
-        Monster.objects.filter(pk=monster.pk).delete()
         if character.experience >= character.exp_to_lvl_up:
             character.level += 1
             character.attribute_points += 2
             character.exp_to_lvl_up *= 1.5
         character.save()
 
-    def player_defeat(self, character, monster):
-        pass
-        # character.experience *= 0.80
-        # character.current_health = character.max_health
-        # character.current_mana = character.max_mana
-        # character.save()
-        # Monster.objects.filter(pk=monster.pk).delete()
-        # return HttpResponseRedirect(reverse('game:character-death', args=[request.user.pk]))
+    def player_defeat(self, character):
+        character.experience *= 0.80
+        character.current_health = character.max_health
+        character.current_mana = character.max_mana
+        character.save()
 
     def post(self, request, *args, **kwargs):
         create_monster = Monster.create_monster(Character.objects.filter(user=self.kwargs['pk']))
@@ -77,15 +72,17 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
                 character.current_health -= monster_dmg
                 if character.current_health <= 0:
-                    self.player_defeat(character, monster)
+                    self.player_defeat(character)
+                    data = {'status': 0, 'url': '/'}
+                    return JsonResponse(data)
                 character.save()
             self.monster_defeat(character, monster)
-            data = {'monster_health': monster.health,
+            data = {'status': 1,
+                    'monster_health': monster.health,
                     'player_health': character.current_health,
                     'player_exp': character.experience,
                     'player_lvl': character.level,
-                    'monster_type': monster.type,
-                    'monster_id': monster.id}
+                    'monster_type': monster.type}
             return JsonResponse(data)
         return render(request, self.template_name)
 
@@ -114,7 +111,3 @@ class LobbyView(TemplateView):
 
 class PlayerVsPlayerView(TemplateView):
     template_name = 'game/player-vs-player.html'
-
-
-class CharacterDeath(LoginRequiredMixin, TemplateView):
-    template_name = 'game/character-death.html'

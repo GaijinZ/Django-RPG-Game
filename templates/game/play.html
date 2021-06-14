@@ -67,11 +67,21 @@
                      },
                     data: $('#hit').serialize(),
                     success: function(response) {
-                        $(' #monster-health').html('Health: ' + response.monster_health);
-                        $(' #player-health').html('Health: ' + response.player_health);
-                        $(' #player-exp').html('Experience: ' + response.player_exp);
-                        $(' #player-lvl').html('Level: ' + response.player_lvl);
-                        $(' #monster-type').html(response.monster_type);
+                        if(response.status == 0){
+                            alert('You have died')
+                            window.location = response.url;
+                        }
+                        else{
+                            $(' #monster-health').html('Health: ' + response.monster_health);
+                            $(' #player-health').html('Health: ' + response.player_health);
+                            $(' #player-exp').html('Experience: ' + response.player_exp);
+                            $(' #player-lvl').html('Level: ' + response.player_lvl);
+                            $(' #monster-type').html(response.monster_type);
+                            if(response.monster_health <= 0) {
+                                alert('You have killed the monster');
+                                $(' #monster-health').html('Health: ' + 0);
+                            }
+                        }
                     }
                 });
             });
