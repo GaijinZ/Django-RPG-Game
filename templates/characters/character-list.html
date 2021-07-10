@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -9,6 +9,5 @@
     <h4>Level - {{ object.level }}</h4>
 </a>
 {% endfor %}
-    <br><br>
-    <a href="{% url 'game:home' %}">Home</a>
+
 {% endblock %}

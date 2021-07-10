@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -8,8 +8,6 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Register</button>
-    <br><br>
-    <a href="{% url 'game:home' %}">Home</a>
 </form>
 
 {% endblock %}

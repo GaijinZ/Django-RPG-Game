@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -10,8 +10,5 @@
     <h5>Mana cost - {{ spell.mana_cost }}</h5>
     <h5>Damage type - {{ spell.dmg_type }}</h5>
 {% endfor %}
-
-<br><br>
-<a href="{% url 'game:home' %}">Home</a>
 
 {% endblock %}

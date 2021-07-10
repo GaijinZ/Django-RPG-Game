@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -20,9 +20,5 @@
 {% for potion in object_list %}
     <a href="{% url 'items:potions-available' potion.pk %}"><h4>Potions</h4></a>
 {% endfor %}
-
-<br><br>
-<br><br>
-<a href="{% url 'game:home' %}">Home</a>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -55,8 +55,5 @@
     <a href="{% url 'items:buy-potion' potion.pk %}"><h4>Buy</h4></a>
     <br>
 {% endfor %}
-
-<br><br>
-<a href="{% url 'game:home' %}">Home</a>
 
 {% endblock %}

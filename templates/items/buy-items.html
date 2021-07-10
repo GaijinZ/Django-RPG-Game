@@ -1,5 +1,4 @@
-
-
+{% extends 'base.html' %}
 
 
 {% block content %}
@@ -10,8 +9,6 @@
     {% csrf_token %}
     {{ form.field.as_hidden }}
     <button type="submit">Buy</button>
-    <br><br>
-    <a href="{% url 'game:home' %}">Home</a>
 </form>
 
 {% endblock %}
