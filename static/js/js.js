@@ -13,39 +13,47 @@ function getCookie(name) {
         return cookieValue;
     }
 
-var csrftoken = getCookie('csrftoken')
+function attackMonster(attack_type) {
+    $.ajax({
+        type: 'POST',
+        headers: {"X-CSRFToken": getCookie("csrftoken")},
+        data: {
+            action: attack_type.attr('name'),
+            id: attack_type.attr('value'),
+        },
+        success: function(response) {
+            if(response.status == 0){
+                alert('You have died')
+                window.location = response.url;
+            }
+            else{
+                $(' #monster-id').html('ID: ' + response.monster_id);
+                $(' #monster-health').html('Health: ' + response.monster_health);
+                $(' #player-health').html('Health: ' + response.player_health);
+                $(' #player-mana').html('Mana: ' + response.player_mana);
+                $(' #player-exp').html('Experience: ' + response.player_exp);
+                $(' #player-lvl').html('Level: ' + response.player_lvl);
+                $(' #monster-type').html(response.monster_type);
+                if(response.monster_health <= 0) {
+                    alert('You have killed the monster');
+                    location.reload();
+                }
+            }
+        }
+    });
+};
 
 $(document).ready(function() {
-        $('#weapon-attack').click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    csrfmiddlewaretoken: csrftoken,
-                 },
-                data: $('#hit').serialize(),
-                success: function(response) {
-                    if(response.status == 0){
-                        alert('You have died')
-                        window.location = response.url;
-                    }
-                    else{
-                        $(' #monster-health').html('Health: ' + response.monster_health);
-                        $(' #player-health').html('Health: ' + response.player_health);
-                        $(' #player-exp').html('Experience: ' + response.player_exp);
-                        $(' #player-lvl').html('Level: ' + response.player_lvl);
-                        $(' #monster-type').html(response.monster_type);
-                        location.reload();
-                        if(response.monster_health <= 0) {
-                            alert('You have killed the monster');
-                            $(' #monster-health').html('Health: ' + response.monster_health);
-                        }
-                    }
-                }
-            });
-        });
+    $(".weapon").on('click', '#weapon-attack', function(e) {
+        e.preventDefault();
+        attackMonster($(this));
     });
+    $(".spells").on('click', '#spell-attack', function(e) {
+        e.preventDefault();
+        attackMonster($(this));
+    });
+});
+
 
 const modal = document.querySelector(".spells");
 const trigger = document.querySelector("#trigger");

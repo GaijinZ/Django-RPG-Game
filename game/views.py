@@ -1,11 +1,11 @@
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
+from items.models import Spell
 from monsters.models import Monster
 from characters.models import Character
 from game.models import PlayerVsPlayer
@@ -24,9 +24,11 @@ class PlayView(LoginRequiredMixin, TemplateView):
         current_player = Character.objects.filter(user=self.kwargs['pk'])
         create_monster = Monster.create_monster(current_player)
         current_monster = Monster.objects.filter(pk=create_monster.pk)
+        spells_available = Spell.objects.filter(character__in=current_player)
 
         context['current_player'] = current_player
         context['current_monster'] = current_monster
+        context['spells_available'] = spells_available
         return context
 
     def weapon_attack(self, character, monster):
@@ -35,8 +37,7 @@ class PlayView(LoginRequiredMixin, TemplateView):
         dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
         monster.health -= dmg
 
-    def spell_attack(self, character, monster):
-        spell = character.spell_equipped.get(id=self.kwargs['pk'])
+    def spell_attack(self, spell, character, monster):
         if character.current_mana >= spell.mana_cost:
             if spell.dmg_type != monster.immune:
                 dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
@@ -50,6 +51,7 @@ class PlayView(LoginRequiredMixin, TemplateView):
     def monster_defeat(self, character, monster):
         character.experience += monster.experience_given
         character.gold += monster.gold_given
+        Monster.objects.filter(pk=monster.pk).delete()
         if character.experience >= character.exp_to_lvl_up:
             character.level += 1
             character.attribute_points += 2
@@ -66,8 +68,13 @@ class PlayView(LoginRequiredMixin, TemplateView):
         create_monster = Monster.create_monster(Character.objects.filter(user=self.kwargs['pk']))
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.get_or_create(create_monster)[0]
+        spell = character.spell_equipped.get(pk=request.POST.get('id'))
         if request.is_ajax():
-            self.weapon_attack(character, monster)
+            if request.POST.get('action') == 'weapon_id':
+                self.weapon_attack(character, monster)
+            elif request.POST.get('action') == 'spell_id':
+                self.spell_attack(spell, character, monster)
+
             if monster.health > 0:
                 monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
                 character.current_health -= monster_dmg
@@ -76,10 +83,15 @@ class PlayView(LoginRequiredMixin, TemplateView):
                     data = {'status': 0, 'url': '/'}
                     return JsonResponse(data)
                 character.save()
-            self.monster_defeat(character, monster)
+
+            if monster.health <= 0:
+                self.monster_defeat(character, monster)
+
             data = {'status': 1,
+                    'monster_id': monster.pk,
                     'monster_health': monster.health,
                     'player_health': character.current_health,
+                    'player_mana': character.current_mana,
                     'player_exp': character.experience,
                     'player_lvl': character.level,
                     'monster_type': monster.type}

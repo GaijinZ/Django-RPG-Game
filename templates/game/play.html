@@ -6,6 +6,7 @@
 {% block content %}
 
 {% for player in current_player %}
+<div class="weapon">
     <a href="{% url 'items:shop' player.pk %}"><h5>Shop</h5></a>
     <br>
     <a href="{% url 'items:potions-available' player.pk %}"><h5>Use potion</h5></a>
@@ -14,12 +15,14 @@
     <h5 id="player-lvl"> Level: {{ player.level }}</h5>
     <h5 id="player-exp">Experience: {{ player.experience }}</h5>
     <h5 id="player-health">Health: {{ player.current_health }}</h5>
-    <h5>Mana: {{ player.current_mana }}</h5>
+    <h5 id="player-mana">Mana: {{ player.current_mana }}</h5>
     <br>
-    <form id="hit" method="POST">
+    <form method="POST">
         {% csrf_token %}
-        <button id="weapon-attack">Attack with {{ player.weapon_equipped.name }}</button>
+        <button id="weapon-attack" name="weapon_id" value="{{ player.weapon_equipped.id }}">
+            Attack with {{ player.weapon_equipped.name }}</button>
     </form>
+</div>
 {% endfor %}
 
 <br>
@@ -29,17 +32,23 @@
 <div class="spells">
     <div class="content">
         <span class="close-button">&times;</span>
-        {% for spell in spells_available %}
-            <h4>{{ spell.name }}</h4>
-            <h5>Min dmg: {{ spell.min_spell_dmg }}</h5>
-            <h5>Max dmg: {{ spell.max_spell_dmg }}</h5>
-            <h5>Mana cost: {{ spell.mana_cost }}</h5>
-            <h5>Dmg type: {{ spell.dmg_type }}</h5>
-        {% endfor %}
+        <form method="POST">
+             {% for spell in spells_available %}
+                {% csrf_token %}
+                <h4>{{ spell.name }}</h4>
+                <h5>Min dmg: {{ spell.min_spell_dmg }}</h5>
+                <h5>Max dmg: {{ spell.max_spell_dmg }}</h5>
+                <h5>Mana cost: {{ spell.mana_cost }}</h5>
+                <h5>Dmg type: {{ spell.dmg_type }}</h5>
+                <button id="spell-attack" name="spell_id" value="{{ spell.id }}">Use {{ spell.name }}</button>
+                <h5>--------------------</h5>
+            {% endfor %}
+        </form>
     </div>
 </div>
 
 {% for monster in current_monster %}
+    <h5 id="monster-id">ID: {{ monster.id }}</h5>
     <h5 id="monster-type">{{ monster.name }}</h5>
     <h5 id="monster-health">Health: {{ monster.health }}</h5>
     <h5>Immune: {{ monster.immune }}</h5>
