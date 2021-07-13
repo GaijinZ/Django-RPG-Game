@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 from characters.models import Character
 
@@ -18,7 +19,6 @@ class PlayerVsPlayer(models.Model):
 
     @staticmethod
     def get_games_for_player(user):
-        from django.db.models import Q
         return PlayerVsPlayer.objects.filter(Q(opponent=user) | Q(creator=user))
 
     @staticmethod

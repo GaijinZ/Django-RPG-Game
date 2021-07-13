@@ -48,6 +48,14 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 character.current_mana -= spell.mana_cost
                 character.save()
 
+    def monster_attack(self, character, monster):
+        armor_health = character.armor_equipped.health
+        armor_defence = character.armor_equipped.defence
+        monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
+        armor_health += character.max_health
+        monster_dmg -= armor_defence
+        character.current_health -= monster_dmg
+
     def monster_defeat(self, character, monster):
         character.experience += monster.experience_given
         character.gold += monster.gold_given
@@ -76,8 +84,7 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 self.spell_attack(spell, character, monster)
 
             if monster.health > 0:
-                monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
-                character.current_health -= monster_dmg
+                self.monster_attack(character, monster)
                 if character.current_health <= 0:
                     self.player_defeat(character)
                     data = {'status': 0, 'url': '/'}
