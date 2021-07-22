@@ -82,6 +82,7 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 self.weapon_attack(character, monster)
             elif request.POST.get('action') == 'spell_id':
                 self.spell_attack(spell, character, monster)
+            monster.save()
 
             if monster.health > 0:
                 self.monster_attack(character, monster)

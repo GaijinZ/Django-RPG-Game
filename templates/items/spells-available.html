@@ -4,7 +4,7 @@
 {% block content %}
 
 {% for spell in object_list %}
-    <a href="{% url 'game:player-attack-monster' 'spell' spell.pk %}"><h3>{{ spell.name }}</h3></a>
+    <h3>{{ spell.name }}</h3>
     <h5>Min dmg - {{ spell.min_spell_dmg }}</h5>
     <h5>Max dmg - {{ spell.max_spell_dmg }}</h5>
     <h5>Mana cost - {{ spell.mana_cost }}</h5>

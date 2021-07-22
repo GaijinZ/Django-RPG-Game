@@ -1,7 +1,6 @@
+<title>Fight</title>
 {% extends 'base.html' %}
 {% load static %}
-
-<title>Fight</title>
 
 {% block content %}
 
@@ -29,7 +28,7 @@
 <button id="trigger">Attack with available spells</button>
 <br><br>
 
-<div class="spells">
+<div class="items">
     <div class="content">
         <span class="close-button">&times;</span>
         <form method="POST">
@@ -53,5 +52,5 @@
     <h5 id="monster-health">Health: {{ monster.health }}</h5>
     <h5>Immune: {{ monster.immune }}</h5>
 {% endfor %}
-
+<script src="{% static 'js/play/play.js' %}"></script>
 {% endblock %}

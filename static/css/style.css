@@ -1,4 +1,4 @@
-.spells {
+.items, .weapon-items, .armor-items, .spell-items, .potion-items {
     position: fixed;
     left: 0;
     top: 0;
@@ -36,7 +36,7 @@
     background-color: darkgray;
 }
 
-.show-spells {
+.show-items, .show-weapon-items, .show-weapon-items, .show-spell-items, .show-potion-items {
     opacity: 1;
     visibility: visible;
     transform: scale(1.0);

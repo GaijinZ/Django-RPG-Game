@@ -13,13 +13,13 @@ function getCookie(name) {
         return cookieValue;
     }
 
-function attackMonster(attack_type) {
+function attackMonster(attackType) {
     $.ajax({
         type: 'POST',
         headers: {"X-CSRFToken": getCookie("csrftoken")},
         data: {
-            action: attack_type.attr('name'),
-            id: attack_type.attr('value'),
+            action: attackType.attr('name'),
+            id: attackType.attr('value'),
         },
         success: function(response) {
             if(response.status == 0){
@@ -55,12 +55,12 @@ $(document).ready(function() {
 });
 
 
-const modal = document.querySelector(".spells");
+const modal = document.querySelector(".items");
 const trigger = document.querySelector("#trigger");
 const closeButton = document.querySelector(".close-button");
 
 function toggleModal() {
-    modal.classList.toggle("show-spells");
+    modal.classList.toggle("show-items");
 }
 
 function windowOnClick(event) {

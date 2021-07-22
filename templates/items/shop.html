@@ -1,5 +1,6 @@
+<title>Shop</title>
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block content %}
 
@@ -7,53 +8,100 @@
     <h4>Name: {{ char.name }}</h4>
     <h4>Gold: {{ char.gold }}</h4>
 {% endfor %}
-<br>
-<h4>Weapons</h4>
-<br>
-{% for weapon in weapons_to_buy %}
-    <h4>{{ weapon.name }}</h4>
-    <h5>Minimum damage - {{ weapon.min_melee_dmg }}</h5>
-    <h5>Maximum damage - {{ weapon.max_melee_dmg }}</h5>
-    <h5>Level required - {{ weapon.level_required }}</h5>
-    <h5>Price - {{ weapon.price }} gold</h5>
-
-    <a href="{% url 'items:buy-items' 'weapon' weapon.pk %}"><h4>Buy</h4></a>
-    <br>
-{% endfor %}
 
 <br>
-<h4>Armors</h4>
+<button id="weapons">Weapons</button>
 <br>
-{% for armor in armors_to_buy %}
-    <h4>{{ armor.name }}</h4>
-    <h5>Defence - {{ armor.defence }}</h5>
-    <h5>Additional health - {{ armor.health }}</h5>
-    <h5>Level required - {{ armor.level_required }}</h5>
-    <h5>Price - {{ armor.price }}</h5>
 
-    <a href="{% url 'items:buy-items' 'armor' armor.pk %}"><h4>Buy</h4></a>
-    <br>
-{% endfor %}
+<div class="weapon-items">
+    <div class="content">
+        <span class="close-button">&times;</span>
+        <form method="POST">
+            {% csrf_token %}
+            {% for weapon in weapons_to_buy %}
+                <h4>{{ weapon.name }}</h4>
+                <h5>Minimum damage - {{ weapon.min_melee_dmg }}</h5>
+                <h5>Maximum damage - {{ weapon.max_melee_dmg }}</h5>
+                <h5>Level required - {{ weapon.level_required }}</h5>
+                <h5>Price - {{ weapon.price }} gold</h5>
+                <br>
+                <button id="buy_weapon" name="weapon_pk" value="{{ weapon.pk }}">Buy</button>
+                <br>
+                <br>
+            {% endfor %}
+        </form>
+    </div>
+</div>
 
 <br>
-<h4>Spells</h4>
 <br>
-{% for spell in spells_to_buy %}
-    <h4>{{ spell.name }}</h4>
-    <h5>Minimum damage - {{ spell.min_spell_dmg }}</h5>
-    <h5>Maximum damage - {{ spell.max_spell_dmg }}</h5>
-    <h5>Level required - {{ spell.level_required }}</h5>
-    <h5>Price - {{ spell.price }}</h5>
+<button id="armors">Armors</button>
+<br>
 
-    <a href="{% url 'items:buy-items' 'spell' spell.pk %}"><h4>Buy</h4></a>
-    <br>
-{% endfor %}
+<div class="armor-items">
+    <div class="content">
+        <span class="close-button">&times;</span>
+        <form method="POST">
+            {% csrf_token %}
+            {% for armor in armors_to_buy %}
+                <h4>{{ armor.name }}</h4>
+                <h5>Defence - {{ armor.defence }}</h5>
+                <h5>Additional health - {{ armor.health }}</h5>
+                <h5>Level required - {{ armor.level_required }}</h5>
+                <h5>Price - {{ armor.price }}</h5>
+                <br>
+                <button id="buy_armor" name="armor_pk" value="{{ armor.pk }}">Buy</button>
+                <br>
+                <br>
+            {% endfor %}
+        </form>
+    </div>
+</div>
 
-{% for potion in potions_to_buy %}
-    <h5>{{ potion.name }}</h5>
+<br>
+<br>
+<button id="spells">Spells</button>
+<br>
 
-    <a href="{% url 'items:buy-potion' potion.pk %}"><h4>Buy</h4></a>
-    <br>
-{% endfor %}
+<div class="spell-items">
+    <div class="content">
+        <span class="close-button">&times;</span>
+        <form method="POST">
+            {% csrf_token %}
+            {% for spell in spells_to_buy %}
+                <h4>{{ spell.name }}</h4>
+                <h5>Minimum damage - {{ spell.min_spell_dmg }}</h5>
+                <h5>Maximum damage - {{ spell.max_spell_dmg }}</h5>
+                <h5>Level required - {{ spell.level_required }}</h5>
+                <h5>Price - {{ spell.price }}</h5>
+                <br>
+                <button id="buy_spel" name="spell_pk" value="{{ spell.pk }}">Buy</button>
+                <br>
+                <br>
+            {% endfor %}
+        </form>
+    </div>
+</div>
 
+<br>
+<br>
+<button id="potions">Potions</button>
+<br>
+
+<div class="potion-items">
+    <div class="content">
+        <span class="close-button">&times;</span>
+        <form method="POST">
+            {% csrf_token %}
+            {% for potion in potions_to_buy %}
+                <h5>{{ potion.name }}</h5>
+                <br>
+                <button id="buy_potion" name="potion_pk" value="{{ potion.pk }}">Buy</button>
+                <br>
+                <br>
+            {% endfor %}
+        </form>
+    </div>
+</div>
+<script src="{% static 'js/shop/shop.js' %}"></script>
 {% endblock %}
