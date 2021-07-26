@@ -15,7 +15,7 @@
 
 <div class="weapon-items">
     <div class="content">
-        <span class="close-button">&times;</span>
+        <span class="close-weapon">&times;</span>
         <form method="POST">
             {% csrf_token %}
             {% for weapon in weapons_to_buy %}
@@ -40,7 +40,7 @@
 
 <div class="armor-items">
     <div class="content">
-        <span class="close-button">&times;</span>
+        <span class="close-armor">&times;</span>
         <form method="POST">
             {% csrf_token %}
             {% for armor in armors_to_buy %}
@@ -65,7 +65,7 @@
 
 <div class="spell-items">
     <div class="content">
-        <span class="close-button">&times;</span>
+        <span class="close-spell">&times;</span>
         <form method="POST">
             {% csrf_token %}
             {% for spell in spells_to_buy %}
@@ -90,7 +90,7 @@
 
 <div class="potion-items">
     <div class="content">
-        <span class="close-button">&times;</span>
+        <span class="close-potion">&times;</span>
         <form method="POST">
             {% csrf_token %}
             {% for potion in potions_to_buy %}

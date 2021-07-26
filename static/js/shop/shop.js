@@ -13,10 +13,10 @@ function getCookie(name) {
         return cookieValue;
     }
 
-function showItems(item, button) {
+function showItems(item, button, close) {
     let modal = document.querySelector(item);
     let trigger = document.querySelector(button);
-    let closeButton = document.querySelector(".close-button");
+    let closeButton = document.querySelector(close);
 
     function toggleModal() {
         modal.classList.toggle("show-items");
@@ -33,7 +33,7 @@ function showItems(item, button) {
     window.addEventListener("click", windowOnClick);
 }
 
-document.querySelector('#weapons').addEventListener('click', showItems('.weapon-items', '#weapons'));
-document.querySelector('#armors').addEventListener('click', showItems('.armor-items', '#armors'));
-document.querySelector('#spells').addEventListener('click', showItems('.spell-items', '#spells'));
-document.querySelector('#potions').addEventListener('click', showItems('.potion-items', '#potions'));
+document.querySelector('#weapons').addEventListener('click', showItems('.weapon-items', '#weapons', '.close-weapon'));
+document.querySelector('#armors').addEventListener('click', showItems('.armor-items', '#armors', '.close-armor'));
+document.querySelector('#spells').addEventListener('click', showItems('.spell-items', '#spells', '.close-spell'));
+document.querySelector('#potions').addEventListener('click', showItems('.potion-items', '#potions', '.close-potion'));

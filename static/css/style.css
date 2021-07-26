@@ -22,7 +22,7 @@
     border-radius: 0.5rem;
 }
 
-.close-button {
+.close-button, .close-weapon, .close-armor, .close-spell, .close-potion {
     float: right;
     width: 1.5rem;
     line-height: 1.5rem;
@@ -32,7 +32,7 @@
     background-color: lightgray;
 }
 
-.close-button:hover {
+.close-button:hover, .close-weapon:hover, .close-armor:hover, .close-spell:hover, .close-potion:hover {
     background-color: darkgray;
 }
 
