@@ -22,7 +22,7 @@ function shop(itemToBuy) {
             id: itemToBuy.attr('value'),
         },
         success: function(response) {
-            alert('You have purchase the ' + response.name)
+            alert('You have purchased the ' + response.name)
             location.reload();
         }
     });
