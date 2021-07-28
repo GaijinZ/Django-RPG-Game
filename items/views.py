@@ -79,14 +79,6 @@ class ShopView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class SpellsAvailable(LoginRequiredMixin, ListView):
-    template_name = 'items/spells-available.html'
-    model = Spell
-
-    def get_queryset(self):
-        return Spell.objects.filter(character=self.kwargs['pk'])
-
-
 class PotionsAvailable(LoginRequiredMixin, ListView):
     template_name = 'items/potions-available.html'
     model = Potion
