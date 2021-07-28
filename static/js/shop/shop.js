@@ -37,6 +37,10 @@ $(document).ready(function() {
         e.preventDefault();
         shop($(this));
     });
+    $(".spell-items").on('click', '#buy_spell', function(e) {
+        e.preventDefault();
+        shop($(this));
+    });
 });
 
 function showItems(item, button, close) {

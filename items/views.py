@@ -40,6 +40,11 @@ class ShopView(LoginRequiredMixin, TemplateView):
             character.gold -= chosen_weapon.price
             character.save()
 
+    def buy_spell(self, character, chosen_spell):
+        if chosen_spell.price and chosen_spell.level_required <= character.gold and character.level:
+            character.spell_equipped.add(chosen_spell)
+            character.save()
+
     def post(self, request, *args, **kwargs):
         chosen_item = None
         character = Character.objects.get(user=request.user)
@@ -50,6 +55,9 @@ class ShopView(LoginRequiredMixin, TemplateView):
             elif request.POST.get('action') == 'armor_pk':
                 chosen_item = Armor.objects.get(pk=request.POST.get('id'))
                 self.buy_item(character, 'armor_equipped_id', chosen_item)
+            elif request.POST.get('action') == 'spell_pk':
+                chosen_item = Spell.objects.get(pk=request.POST.get('id'))
+                self.buy_spell(character, chosen_item)
 
             data = {
                 'name': chosen_item.name
