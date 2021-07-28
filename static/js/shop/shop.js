@@ -13,6 +13,32 @@ function getCookie(name) {
         return cookieValue;
     }
 
+function shop(itemToBuy) {
+    $.ajax({
+        type: 'POST',
+        headers: {"X-CSRFToken": getCookie("csrftoken")},
+        data: {
+            action: itemToBuy.attr('name'),
+            id: itemToBuy.attr('value'),
+        },
+        success: function(response) {
+            alert('You have purchase the ' + response.name)
+            location.reload();
+        }
+    });
+}
+
+$(document).ready(function() {
+    $(".weapon-items").on('click', '#buy_weapon', function(e) {
+        e.preventDefault();
+        shop($(this));
+    });
+    $(".armor-items").on('click', '#buy_armor', function(e) {
+        e.preventDefault();
+        shop($(this));
+    });
+});
+
 function showItems(item, button, close) {
     let modal = document.querySelector(item);
     let trigger = document.querySelector(button);

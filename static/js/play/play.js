@@ -27,7 +27,6 @@ function attackMonster(attackType) {
                 window.location = response.url;
             }
             else{
-                $(' #monster-id').html('ID: ' + response.monster_id);
                 $(' #monster-health').html('Health: ' + response.monster_health);
                 $(' #player-health').html('Health: ' + response.player_health);
                 $(' #player-mana').html('Mana: ' + response.player_mana);

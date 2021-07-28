@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.db.models import F
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import TemplateView, DetailView, ListView
@@ -33,29 +34,28 @@ class ShopView(LoginRequiredMixin, TemplateView):
         context['potions_to_buy'] = potions_to_buy
         return context
 
+    def buy_item(self, character, item_type, chosen_weapon):
+        if chosen_weapon.price and chosen_weapon.level_required <= character.gold and character.level:
+            setattr(character, item_type, chosen_weapon)
+            character.gold -= chosen_weapon.price
+            character.save()
 
-class BuyItems(LoginRequiredMixin, TemplateView):
-    template_name = 'items/buy-items.html'
-
-    def post(self, request, item_type=None, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         chosen_item = None
         character = Character.objects.get(user=request.user)
-        if item_type == 'weapon':
-            chosen_item = Weapon.objects.get(id=self.kwargs['pk'])
-            setattr(character, 'weapon_equipped_id', chosen_item.id)
-        elif item_type == 'armor':
-            chosen_item = Armor.objects.get(id=self.kwargs['pk'])
-            setattr(character, 'armor_equipped_id', chosen_item.id)
-        elif item_type == 'spell':
-            chosen_item = Spell.objects.get(id=self.kwargs['pk'])
-            character.spell_equipped.add(chosen_item)
-        if request.method == 'POST':
-            if chosen_item.price <= character.gold and chosen_item.level_required <= character.level:
-                character.gold = F('gold') - chosen_item.price
-                character.save()
-                return HttpResponseRedirect(reverse('items:shop'))
-        args = {'item': chosen_item}
-        return render(request, self.template_name, args)
+        if request.is_ajax():
+            if request.POST.get('action') == 'weapon_pk':
+                chosen_item = Weapon.objects.get(pk=request.POST.get('id'))
+                self.buy_item(character, 'weapon_equipped_id', chosen_item)
+            elif request.POST.get('action') == 'armor_pk':
+                chosen_item = Armor.objects.get(pk=request.POST.get('id'))
+                self.buy_item(character, 'armor_equipped_id', chosen_item)
+
+            data = {
+                'name': chosen_item.name
+            }
+            return JsonResponse(data)
+        return render(request, self.template_name)
 
 
 class BuyPotion(LoginRequiredMixin, TemplateView):

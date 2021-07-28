@@ -95,14 +95,14 @@ class PlayView(LoginRequiredMixin, TemplateView):
             if monster.health <= 0:
                 self.monster_defeat(character, monster)
 
-            data = {'status': 1,
-                    'monster_id': monster.pk,
-                    'monster_health': monster.health,
-                    'player_health': character.current_health,
-                    'player_mana': character.current_mana,
-                    'player_exp': character.experience,
-                    'player_lvl': character.level,
-                    'monster_type': monster.type}
+            data = {
+                'monster_health': monster.health,
+                'player_health': character.current_health,
+                'player_mana': character.current_mana,
+                'player_exp': character.experience,
+                'player_lvl': character.level,
+                'monster_type': monster.type
+            }
             return JsonResponse(data)
         return render(request, self.template_name)
 

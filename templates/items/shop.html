@@ -6,7 +6,7 @@
 
 {% for char in character %}
     <h4>Name: {{ char.name }}</h4>
-    <h4>Gold: {{ char.gold }}</h4>
+    <h4 id="gold">Gold: {{ char.gold }}</h4>
 {% endfor %}
 
 <br>
@@ -75,7 +75,7 @@
                 <h5>Level required - {{ spell.level_required }}</h5>
                 <h5>Price - {{ spell.price }}</h5>
                 <br>
-                <button id="buy_spel" name="spell_pk" value="{{ spell.pk }}">Buy</button>
+                <button id="buy_spell" name="spell_pk" value="{{ spell.pk }}">Buy</button>
                 <br>
                 <br>
             {% endfor %}
