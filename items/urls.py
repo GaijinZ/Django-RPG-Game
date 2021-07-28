@@ -1,13 +1,12 @@
 from django.urls import path
 
 from .views import ShopView, WeaponDetails, ArmorDetails, SpellDetails, PotionDetails, \
-    BuyPotion, SpellsAvailable, PotionsAvailable, UsePotion
+    SpellsAvailable, PotionsAvailable, UsePotion
 
 app_name = 'items'
 
 urlpatterns = [
     path('shop/<int:pk>/', ShopView.as_view(), name='shop'),
-    path('buy-potion/<int:pk>/', BuyPotion.as_view(), name='buy-potion'),
     path('spells-available/<int:pk>/', SpellsAvailable.as_view(), name='spells-available'),
     path('potions-available/<int:pk>/', PotionsAvailable.as_view(), name='potions-available'),
     path('weapon-details/<int:pk>/', WeaponDetails.as_view(), name='weapon-details'),

@@ -25,7 +25,7 @@
                 <h5>Level required - {{ weapon.level_required }}</h5>
                 <h5>Price - {{ weapon.price }} gold</h5>
                 <br>
-                <button id="buy_weapon" name="weapon_pk" value="{{ weapon.pk }}">Buy</button>
+                <button id="buy_weapon" name="weapon" value="{{ weapon.pk }}">Buy</button>
                 <br>
                 <br>
             {% endfor %}
@@ -50,7 +50,7 @@
                 <h5>Level required - {{ armor.level_required }}</h5>
                 <h5>Price - {{ armor.price }}</h5>
                 <br>
-                <button id="buy_armor" name="armor_pk" value="{{ armor.pk }}">Buy</button>
+                <button id="buy_armor" name="armor" value="{{ armor.pk }}">Buy</button>
                 <br>
                 <br>
             {% endfor %}
@@ -75,7 +75,7 @@
                 <h5>Level required - {{ spell.level_required }}</h5>
                 <h5>Price - {{ spell.price }}</h5>
                 <br>
-                <button id="buy_spell" name="spell_pk" value="{{ spell.pk }}">Buy</button>
+                <button id="buy_spell" name="spell" value="{{ spell.pk }}">Buy</button>
                 <br>
                 <br>
             {% endfor %}
@@ -96,7 +96,7 @@
             {% for potion in potions_to_buy %}
                 <h5>{{ potion.name }}</h5>
                 <br>
-                <button id="buy_potion" name="potion_pk" value="{{ potion.pk }}">Buy</button>
+                <button id="buy_potion" name="potion" value="{{ potion.pk }}">Buy</button>
                 <br>
                 <br>
             {% endfor %}
@@ -104,4 +104,5 @@
     </div>
 </div>
 <script src="{% static 'js/shop/shop.js' %}"></script>
+
 {% endblock %}

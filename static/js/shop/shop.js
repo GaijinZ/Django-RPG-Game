@@ -41,6 +41,10 @@ $(document).ready(function() {
         e.preventDefault();
         shop($(this));
     });
+    $(".potion-items").on('click', '#buy_potion', function(e) {
+        e.preventDefault();
+        shop($(this));
+    });
 });
 
 function showItems(item, button, close) {
