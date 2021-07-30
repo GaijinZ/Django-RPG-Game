@@ -6,14 +6,22 @@
 {% for hero in character %}
     <h3>Weapon</h3>
     <h4>{{ hero.weapon_equipped.name }}</h4>
+    <h4>Min dmg: {{ hero.weapon_equipped.min_melee_dmg }}</h4>
+    <h4>Max dmg: {{ hero.weapon_equipped.max_melee_dmg }}</h4>
     <br>
     <h4>Armor</h4>
     <h4>{{ hero.armor_equipped.name }}</h4>
+    <h4>Defence: {{ hero.armor_equipped.defence }}</h4>
+    <h4>Bonus health: {{ hero.armor_equipped.health }}</h4>
 {% endfor %}
 <br>
 <h3>Spells</h3>
 {% for spell in spells_available %}
     <h4>{{ spell.name }}</h4>
+    <h4>Min smg: {{ spell.min_spell_dmg }}</h4>
+    <h4>Max dmg: {{ spell.max_spell_dmg }}</h4>
+    <h4>Mana cost: {{ spell.mana_cost }}</h4>
+    <h4>Dmg type: {{ spell.dmg_type }}</h4>
 {% endfor %}
 <br>
 <h3>Potions</h3>
