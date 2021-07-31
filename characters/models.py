@@ -24,8 +24,6 @@ class Character(models.Model):
     spell_equipped = models.ManyToManyField(Spell, default=1)
     potions_equipped = models.ManyToManyField(Potion, through='PotionQuantity')
 
-    objects = models.Manager()
-
     def get_absolute_url(self):
         return reverse('characters:character-details', kwargs={'pk': self.pk})
 
@@ -38,10 +36,22 @@ class PotionQuantity(models.Model):
     potion = models.ForeignKey(Potion, on_delete=models.CASCADE)
     amount = models.IntegerField(default=1)
 
-    objects = models.Manager()
+    @classmethod
+    def life_potion(cls, character, potion):
+        character.current_health = character.max_health
+        potion.amount -= 1
+        potion.save()
+        character.save()
+
+    @classmethod
+    def mana_potion(cls, character, potion):
+        character.current_mana = character.max_mana
+        potion.amount -= 1
+        potion.save()
+        character.save()
 
     def __str__(self):
-        return str(self.character)
+        return f'{str(self.character)} - {self.potion}'
 
     class Meta:
         unique_together = [['character', 'potion']]

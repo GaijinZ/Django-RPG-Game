@@ -77,26 +77,3 @@ class ShopView(LoginRequiredMixin, TemplateView):
             }
             return JsonResponse(data)
         return render(request, self.template_name)
-
-
-class UsePotion(LoginRequiredMixin, TemplateView):
-    template_name = 'items/use-potion.html'
-
-    def post(self, request, potion_type=None, *args, **kwargs):
-        potion = Potion.objects.filter(id=self.kwargs['pk'])
-        character = Character.objects.get(user=request.user)
-        current_potions = PotionQuantity.objects.get(potion__in=potion)
-        if request.method == 'POST':
-            if potion_type == 'Life Potion':
-                character.current_health = character.max_health
-                character.save()
-                current_potions.amount -= 1
-                current_potions.save()
-                return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
-            if potion_type == 'Mana Potion':
-                character.current_mana = character.max_mana
-                character.save()
-                current_potions.amount -= 1
-                current_potions.save()
-                return HttpResponseRedirect(reverse('game:play', args=[request.user.pk]))
-        return render(request, self.template_name)

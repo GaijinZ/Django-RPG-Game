@@ -57,14 +57,16 @@
             {% for potion in potions_available %}
                 {% csrf_token %}
                 <h4>{{ potion.potion.name }}</h4>
-                <h4>{{ potion.amount }} left</h4>
+                <h4 id="potion-amount">{{ potion.amount }} left</h4>
+                <button id="use-potion-btn" name="potion_id" value="{{ potion.id }}">Use</button>
+                <h5>--------------------</h5>
             {% endfor %}
         </form>
     </div>
 </div>
 
 {% for monster in current_monster %}
-    <h5 id="monster-type">{{ monster.name }}</h5>
+    <h5 id="monster-name">{{ monster.name }}</h5>
     <h5 id="monster-health">Health: {{ monster.health }}</h5>
     <h5>Immune: {{ monster.immune }}</h5>
 {% endfor %}

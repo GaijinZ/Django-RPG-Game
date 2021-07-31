@@ -80,9 +80,18 @@ class PlayView(LoginRequiredMixin, TemplateView):
         character = Character.objects.get(user=request.user)
         monster = Monster.objects.get_or_create(create_monster)[0]
         spell = character.spell_equipped.get(pk=request.POST.get('id'))
+        current_potion = PotionQuantity.objects.get(potion=request.POST.get('id'))
+
         if request.is_ajax():
-            if request.POST.get('action') == 'weapon_id':
+            if request.POST.get('action') == 'potion_id':
+                if request.POST.get('id') == '1':
+                    PotionQuantity.life_potion(character, current_potion)
+                elif request.POST.get('id') == '2':
+                    PotionQuantity.mana_potion(character, current_potion)
+
+            elif request.POST.get('action') == 'weapon_id':
                 self.weapon_attack(character, monster)
+
             elif request.POST.get('action') == 'spell_id':
                 self.spell_attack(spell, character, monster)
             monster.save()
@@ -104,7 +113,8 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 'player_mana': character.current_mana,
                 'player_exp': character.experience,
                 'player_lvl': character.level,
-                'monster_type': monster.type
+                'monster_name': monster.name,
+                'potion_amount': current_potion.amount,
             }
             return JsonResponse(data)
         return render(request, self.template_name)
