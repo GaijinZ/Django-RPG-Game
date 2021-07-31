@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 from .forms import CharacterForm, SpendPointsForm
 from .models import Character, PotionQuantity
-from items.models import Weapon, Armor, Spell, Potion
+from items.models import Spell
 
 
 class CharacterCreationView(LoginRequiredMixin, CreateView):

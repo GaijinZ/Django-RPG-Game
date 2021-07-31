@@ -87,60 +87,6 @@ class PotionsAvailable(LoginRequiredMixin, ListView):
         return Potion.objects.filter(character=self.kwargs['pk'])
 
 
-class WeaponDetails(LoginRequiredMixin, DetailView):
-    model = Weapon
-    template_name = 'items/weapon-details.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        weapon_details = Weapon.objects.filter(id=self.kwargs['pk'])
-
-        context['weapon_details'] = weapon_details
-        return context
-
-
-class ArmorDetails(LoginRequiredMixin, DetailView):
-    model = Armor
-    template_name = 'items/armor-details.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        armor_details = Armor.objects.filter(id=self.kwargs['pk'])
-
-        context['armor_details'] = armor_details
-        return context
-
-
-class SpellDetails(LoginRequiredMixin, DetailView):
-    model = Spell
-    template_name = 'items/spell-details.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        spell_details = Spell.objects.filter(id=self.kwargs['pk'])
-
-        context['spell_details'] = spell_details
-        return context
-
-
-class PotionDetails(LoginRequiredMixin, DetailView):
-    model = Potion
-    template_name = 'items/potion-details.html'
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        potion = Potion.objects.filter(potionquantity__potion_id=self.kwargs['pk'])
-
-        potion_details = PotionQuantity.objects.filter(potion__in=potion)
-
-        context['potion_details'] = potion_details
-        return context
-
-
 class UsePotion(LoginRequiredMixin, TemplateView):
     template_name = 'items/use-potion.html'
 

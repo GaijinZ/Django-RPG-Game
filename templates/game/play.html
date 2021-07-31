@@ -6,7 +6,7 @@
 
 {% for player in current_player %}
 <div class="weapon">
-    <a href="{% url 'items:shop' player.pk %}"><h5>Shop</h5></a>
+    <a href="{% url 'items:shop' user.pk %}"><h5>Shop</h5></a>
     <br>
     <a href="{% url 'items:potions-available' player.pk %}"><h5>Use potion</h5></a>
     <br><br>
