@@ -1,4 +1,4 @@
-.items, .weapon-items, .armor-items, .spell-items, .potion-items {
+.use-spells, .weapon-items, .armor-items, .spell-items, .potion-items, .use-potions {
     position: fixed;
     left: 0;
     top: 0;
@@ -22,7 +22,7 @@
     border-radius: 0.5rem;
 }
 
-.close-button, .close-weapon, .close-armor, .close-spell, .close-potion {
+.close-spells, .close-weapon, .close-armor, .close-spell, .close-potions {
     float: right;
     width: 1.5rem;
     line-height: 1.5rem;
@@ -32,11 +32,11 @@
     background-color: lightgray;
 }
 
-.close-button:hover, .close-weapon:hover, .close-armor:hover, .close-spell:hover, .close-potion:hover {
+.close-spells:hover, .close-weapon:hover, .close-armor:hover, .close-spell:hover, .close-potions:hover {
     background-color: darkgray;
 }
 
-.show-items, .show-weapon-items, .show-weapon-items, .show-spell-items, .show-potion-items {
+.show-items {
     opacity: 1;
     visibility: visible;
     transform: scale(1.0);

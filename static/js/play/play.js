@@ -53,21 +53,25 @@ $(document).ready(function() {
     });
 });
 
+function showAvailableItems(item, button, close) {
+    let modal = document.querySelector(item);
+    let trigger = document.querySelector(button);
+    let closeButton = document.querySelector(close);
 
-const modal = document.querySelector(".items");
-const trigger = document.querySelector("#trigger");
-const closeButton = document.querySelector(".close-button");
-
-function toggleModal() {
-    modal.classList.toggle("show-items");
-}
-
-function windowOnClick(event) {
-    if (event.target === modal) {
-        toggleModal();
+    function toggleModal() {
+        modal.classList.toggle("show-items");
     }
+
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
+        }
+    }
+
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
 }
 
-trigger.addEventListener("click", toggleModal);
-closeButton.addEventListener("click", toggleModal);
-window.addEventListener("click", windowOnClick);
+document.querySelector('#available-spells').addEventListener('click', showAvailableItems('.use-spells', '#available-spells', '.close-spells'));
+document.querySelector('#available-potions').addEventListener('click', showAvailableItems('.use-potions', '#available-potions', '.close-potions'));

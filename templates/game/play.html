@@ -7,8 +7,6 @@
 {% for player in current_player %}
 <div class="weapon">
     <a href="{% url 'items:shop' user.pk %}"><h5>Shop</h5></a>
-    <br>
-    <a href="{% url 'items:potions-available' player.pk %}"><h5>Use potion</h5></a>
     <br><br>
     <h5>{{ player.name }}</h5>
     <h5 id="player-lvl"> Level: {{ player.level }}</h5>
@@ -25,12 +23,12 @@
 {% endfor %}
 
 <br>
-<button id="trigger">Attack with available spells</button>
-<br><br>
+<button id="available-spells">Attack with available spells</button>
+<br>
 
-<div class="items">
+<div class="use-spells">
     <div class="content">
-        <span class="close-button">&times;</span>
+        <span class="close-spells">&times;</span>
         <form method="POST">
              {% for spell in spells_available %}
                 {% csrf_token %}
@@ -46,8 +44,26 @@
     </div>
 </div>
 
+<br>
+<br>
+<button id="available-potions">Use potion</button>
+<br>
+<br>
+
+<div class="use-potions">
+    <div class="content">
+        <span class="close-potions">&times;</span>
+        <form method="POST">
+            {% for potion in potions_available %}
+                {% csrf_token %}
+                <h4>{{ potion.potion.name }}</h4>
+                <h4>{{ potion.amount }} left</h4>
+            {% endfor %}
+        </form>
+    </div>
+</div>
+
 {% for monster in current_monster %}
-    <h5 id="monster-id">ID: {{ monster.id }}</h5>
     <h5 id="monster-type">{{ monster.name }}</h5>
     <h5 id="monster-health">Health: {{ monster.health }}</h5>
     <h5>Immune: {{ monster.immune }}</h5>

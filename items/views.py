@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Weapon, Armor, Spell, Potion
@@ -79,14 +79,6 @@ class ShopView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class PotionsAvailable(LoginRequiredMixin, ListView):
-    template_name = 'items/potions-available.html'
-    model = Potion
-
-    def get_queryset(self):
-        return Potion.objects.filter(character=self.kwargs['pk'])
-
-
 class UsePotion(LoginRequiredMixin, TemplateView):
     template_name = 'items/use-potion.html'
 
@@ -95,7 +87,7 @@ class UsePotion(LoginRequiredMixin, TemplateView):
         character = Character.objects.get(user=request.user)
         current_potions = PotionQuantity.objects.get(potion__in=potion)
         if request.method == 'POST':
-            if potion_type == 'Health Potion':
+            if potion_type == 'Life Potion':
                 character.current_health = character.max_health
                 character.save()
                 current_potions.amount -= 1

@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from items.models import Spell
+from characters.models import PotionQuantity
 from monsters.models import Monster
 from characters.models import Character
 from game.models import PlayerVsPlayer
@@ -25,10 +26,12 @@ class PlayView(LoginRequiredMixin, TemplateView):
         create_monster = Monster.create_monster(current_player)
         current_monster = Monster.objects.filter(pk=create_monster.pk)
         spells_available = Spell.objects.filter(character__in=current_player)
+        potions_available = PotionQuantity.objects.filter(character__in=current_player)
 
         context['current_player'] = current_player
         context['current_monster'] = current_monster
         context['spells_available'] = spells_available
+        context['potions_available'] = potions_available
         return context
 
     def weapon_attack(self, character, monster):
