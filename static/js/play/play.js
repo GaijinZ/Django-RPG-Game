@@ -1,17 +1,6 @@
-function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+import { getCookie } from '../utils.js'
+import { showItems } from '../utils.js'
+
 
 function attackMonster(attackType) {
     $.ajax({
@@ -58,29 +47,9 @@ $(document).ready(function() {
     });
 });
 
-function showAvailableItems(item, button, close) {
-    let modal = document.querySelector(item);
-    let trigger = document.querySelector(button);
-    let closeButton = document.querySelector(close);
-
-    function toggleModal() {
-        modal.classList.toggle("show-items");
-    }
-
-    function windowOnClick(event) {
-        if (event.target === modal) {
-            toggleModal();
-        }
-    }
-
-    trigger.addEventListener("click", toggleModal);
-    closeButton.addEventListener("click", toggleModal);
-    window.addEventListener("click", windowOnClick);
-}
-
 document.querySelector('#available-spells').addEventListener(
-    'click', showAvailableItems('.use-spells', '#available-spells', '.close-spells'
+    'click', showItems('.use-spells', '#available-spells', '.close-spells'
 ));
 document.querySelector('#available-potions').addEventListener(
-    'click', showAvailableItems('.use-potions', '#available-potions', '.close-potions'
+    'click', showItems('.use-potions', '#available-potions', '.close-potions'
 ));
