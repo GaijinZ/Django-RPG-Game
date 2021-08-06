@@ -1,9 +1,23 @@
+{% extends 'base.html' %}
 
 <title>Available Games</title>
 
+{% block content %}
 
 <br>
 <a href="{% url 'game:player-vs-player' %}"><h5>Create Game</h5></a>
 <br>
 <br>
 Available Games
+
+{% for game in available_games %}
+    {{ game }}
+{% endfor %}
+
+{% for player in player_games %}
+    {{ player }}
+{% endfor %}
+
+<script></script>
+
+{% endblock %}

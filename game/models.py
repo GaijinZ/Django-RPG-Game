@@ -11,8 +11,6 @@ class PlayerVsPlayer(models.Model):
     completed = models.DateTimeField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    objects = models.Manager()
-
     @staticmethod
     def get_available_games():
         return PlayerVsPlayer.objects.filter(opponent=None, completed=None)

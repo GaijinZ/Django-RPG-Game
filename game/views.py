@@ -120,9 +120,8 @@ class PlayView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name)
 
 
-class LobbyView(TemplateView):
+class LobbyView(LoginRequiredMixin, TemplateView):
     template_name = 'game/lobby.html'
-    model = Character
 
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
