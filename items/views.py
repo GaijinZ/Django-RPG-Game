@@ -1,12 +1,11 @@
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.urls import reverse
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Weapon, Armor, Spell, Potion
 from characters.models import Character, PotionQuantity
+from .models import Weapon, Armor, Spell, Potion
+
 
 
 class ShopView(LoginRequiredMixin, TemplateView):
@@ -18,11 +17,11 @@ class ShopView(LoginRequiredMixin, TemplateView):
         character = Character.objects.filter(user=self.kwargs['pk'])
 
         weapons_to_buy = Weapon.objects.exclude(
-            name__in=Character.objects.values_list('weapon_equipped__name', flat=True))
+            name__in=character.values_list('weapon_equipped__name', flat=True))
         armors_to_buy = Armor.objects.exclude(
-            name__in=Character.objects.values_list('armor_equipped__name', flat=True))
+            name__in=character.values_list('armor_equipped__name', flat=True))
         spells_to_buy = Spell.objects.exclude(
-            name__in=Character.objects.values_list('spell_equipped__name', flat=True))
+            name__in=character.values_list('spell_equipped__name', flat=True))
         potions_to_buy = Potion.objects.all()
 
         context['character'] = character
@@ -32,14 +31,18 @@ class ShopView(LoginRequiredMixin, TemplateView):
         context['potions_to_buy'] = potions_to_buy
         return context
 
-    def buy_item(self, character, item_type, chosen_weapon):
-        if chosen_weapon.price and chosen_weapon.level_required <= character.gold and character.level:
+    @staticmethod
+    def buy_item(character, item_type, chosen_weapon):
+        if chosen_weapon.price and \
+                chosen_weapon.level_required <= character.gold and character.level:
             setattr(character, item_type, chosen_weapon)
             character.gold -= chosen_weapon.price
             character.save()
 
-    def buy_spell(self, character, chosen_spell):
-        if chosen_spell.price and chosen_spell.level_required <= character.gold and character.level:
+    @staticmethod
+    def buy_spell(character, chosen_spell):
+        if chosen_spell.price and \
+                chosen_spell.level_required <= character.gold and character.level:
             character.spell_equipped.add(chosen_spell)
             character.save()
 
