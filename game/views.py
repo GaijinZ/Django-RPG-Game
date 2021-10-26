@@ -6,9 +6,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from items.models import Spell
-from characters.models import PotionQuantity
+from characters.models import PotionQuantity, Character
 from monsters.models import Monster
-from characters.models import Character
 from game.models import PlayerVsPlayer
 
 
@@ -34,13 +33,15 @@ class PlayView(LoginRequiredMixin, TemplateView):
         context['potions_available'] = potions_available
         return context
 
-    def weapon_attack(self, character, monster):
+    @staticmethod
+    def weapon_attack(character, monster):
         weapon_min_dmg = character.weapon_equipped.min_melee_dmg
         weapon_max_dmg = character.weapon_equipped.max_melee_dmg
         dmg = random.randint(weapon_min_dmg, weapon_max_dmg)
         monster.health -= dmg
 
-    def spell_attack(self, spell, character, monster):
+    @staticmethod
+    def spell_attack(spell, character, monster):
         if character.current_mana >= spell.mana_cost:
             if spell.dmg_type != monster.immune:
                 dmg = random.randint(spell.min_spell_dmg, spell.max_spell_dmg)
@@ -51,7 +52,8 @@ class PlayView(LoginRequiredMixin, TemplateView):
                 character.current_mana -= spell.mana_cost
                 character.save()
 
-    def monster_attack(self, character, monster):
+    @staticmethod
+    def monster_attack(character, monster):
         armor_health = character.armor_equipped.health
         armor_defence = character.armor_equipped.defence
         monster_dmg = random.randint(monster.min_dmg, monster.max_dmg)
@@ -59,7 +61,8 @@ class PlayView(LoginRequiredMixin, TemplateView):
         monster_dmg -= armor_defence
         character.current_health -= monster_dmg
 
-    def monster_defeat(self, character, monster):
+    @staticmethod
+    def monster_defeat(character, monster):
         character.experience += monster.experience_given
         character.gold += monster.gold_given
         Monster.objects.filter(pk=monster.pk).delete()
@@ -69,7 +72,8 @@ class PlayView(LoginRequiredMixin, TemplateView):
             character.exp_to_lvl_up *= 1.5
         character.save()
 
-    def player_defeat(self, character):
+    @staticmethod
+    def player_defeat(character):
         character.experience *= 0.80
         character.current_health = character.max_health
         character.current_mana = character.max_mana
@@ -123,17 +127,16 @@ class PlayView(LoginRequiredMixin, TemplateView):
 class LobbyView(LoginRequiredMixin, TemplateView):
     template_name = 'game/lobby.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         # we're creating a list of games that contains just the id (for the link) and the creator
-        available_games = [{'creator': game.creator.username, 'id': game.pk} for game in
+        available_games = [{'creator': game.creator.name, 'id': game.pk} for game in
                            PlayerVsPlayer.get_available_games()]
+
         # for the player's games, we're returning a list of games with the opponent and id
-        player_games = PlayerVsPlayer.get_games_for_player(Character.objects.get(user=self.request.user))
+        player_games = PlayerVsPlayer.get_games_for_player(
+            Character.objects.get(user=self.request.user))
 
         context['available_games'] = available_games
         context['player_games'] = player_games
