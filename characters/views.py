@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
 
+from items.models import Spell
 from .forms import CharacterForm, SpendPointsForm
 from .models import Character, PotionQuantity
-from items.models import Spell
 
 
 class CharacterCreationView(LoginRequiredMixin, CreateView):
@@ -51,7 +51,7 @@ class CharacterInventory(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        character = Character.objects.all()
+        character = Character.objects.get(id=self.kwargs['pk'])
         spells_available = Spell.objects.filter(character__in=character)
         potions_available = PotionQuantity.objects.filter(character__in=character)
 
@@ -70,11 +70,10 @@ class SpendPoints(LoginRequiredMixin, CreateView):
         return Character.objects.filter(user=self.kwargs['pk'])
 
     def form_valid(self, form):
-        request = self.request
-        character = Character.objects.get(user=request.user)
+        character = Character.objects.get(user=self.request.user)
         spell_name = Spell.objects.filter(character=character)
         if request.method == 'POST':
-            form = SpendPointsForm(request.POST)
+            form = SpendPointsForm(self.request.POST)
             if form.is_valid():
                 strength = form.cleaned_data['strength']
                 intelligence = form.cleaned_data['intelligence']
@@ -90,7 +89,8 @@ class SpendPoints(LoginRequiredMixin, CreateView):
                 character.current_health = character.max_health
                 character.current_mana = character.max_mana
                 character.save()
-                return HttpResponseRedirect(reverse('characters:character-details', args=[character.pk]))
+                return HttpResponseRedirect(reverse
+                                            ('characters:character-details', args=[character.pk]))
 
         form = SpendPointsForm
         return render(request, self.template_name, {'form': form})
