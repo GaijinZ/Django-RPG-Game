@@ -24,11 +24,19 @@ class Character(models.Model):
     spell_equipped = models.ManyToManyField(Spell, default=1)
     potions_equipped = models.ManyToManyField(Potion, through='PotionQuantity')
 
-    def get_absolute_url(self):
-        return reverse('characters:character-details', kwargs={'pk': self.pk})
-
     def __str__(self):
         return self.name
+
+
+class CharacterToPlay(models.Model):
+    name = models.ForeignKey(Character, null=True, on_delete=models.CASCADE)
+    slug = models.SlugField(null=False, unique=True)
+
+    def get_absolute_url(self):
+        return reverse('characters:character-pick', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return f'{self.slug}'
 
 
 class PotionQuantity(models.Model):
@@ -51,7 +59,7 @@ class PotionQuantity(models.Model):
         character.save()
 
     def __str__(self):
-        return f'{str(self.character)} - {self.potion}'
+        return f'{self.character} - {self.potion}'
 
     class Meta:
         unique_together = [['character', 'potion']]
