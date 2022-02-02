@@ -4,9 +4,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render
 
-from items.models import Spell
 from .forms import CharacterForm, SpendPointsForm
 from .models import Character, PotionQuantity
+from items.models import Spell
 
 
 class CharacterCreationView(LoginRequiredMixin, CreateView):
@@ -51,7 +51,7 @@ class CharacterInventory(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        character = Character.objects.get(id=self.kwargs['pk'])
+        character = Character.objects.all()
         spells_available = Spell.objects.filter(character__in=character)
         potions_available = PotionQuantity.objects.filter(character__in=character)
 
@@ -69,6 +69,20 @@ class SpendPoints(LoginRequiredMixin, CreateView):
     def get_queryset(self):
         return Character.objects.filter(user=self.kwargs['pk'])
 
+    def add_points(self, character, strength, intelligence, spell_name):
+        character.strength += strength
+        character.intelligence += intelligence
+        character.max_health += (2 * strength)
+        character.max_mana += (2 * intelligence)
+        character.weapon_equipped.max_melee_dmg += strength
+        for spell in spell_name:
+            spell.max_spell_dmg += intelligence
+        character.attribute_points -= strength
+        character.attribute_points -= intelligence
+        character.current_health = character.max_health
+        character.current_mana = character.max_mana
+        character.save()
+
     def form_valid(self, form):
         character = Character.objects.get(user=self.request.user)
         spell_name = Spell.objects.filter(character=character)
@@ -77,18 +91,7 @@ class SpendPoints(LoginRequiredMixin, CreateView):
             if form.is_valid():
                 strength = form.cleaned_data['strength']
                 intelligence = form.cleaned_data['intelligence']
-                character.strength += strength
-                character.intelligence += intelligence
-                character.max_health += (2 * strength)
-                character.max_mana += (2 * intelligence)
-                character.weapon_equipped.max_melee_dmg += strength
-                for spell in spell_name:
-                    spell.max_spell_dmg += intelligence
-                character.attribute_points -= strength
-                character.attribute_points -= intelligence
-                character.current_health = character.max_health
-                character.current_mana = character.max_mana
-                character.save()
+                self.add_points(character, strength, intelligence, spell_name)
                 return HttpResponseRedirect(reverse
                                             ('characters:character-details', args=[character.pk]))
 
